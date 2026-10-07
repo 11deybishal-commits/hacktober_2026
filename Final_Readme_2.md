@@ -4,11 +4,11 @@
 
 **Hacktober Fest — Open Source AI Hackathon (Elevate)** · **Track 3 — VYOM+ End-to-End AI-Powered GST Invoice Intelligence System** · *Qualifier (README-only proposal)*
 
-> **Team:** `[Team Name]` · `[Member 1]` · `[Member 2]` · `[Member 3]` · `[Member 4]` · **Planned license:** Apache-2.0
+> **Team:** `[Astra_X]` · `[Bishal Dey]` · `[Miheer Kulkarni]` · `[Wrichik Pau]` · **Planned license:** Apache-2.0
 
 ---
 
-## The thesis in 60 seconds
+## The thesis :
 
 Most invoice-AI demos run OCR, pass the text to an LLM and print JSON. That works on a clean PDF but **fails silently on a handwritten invoice**, where a model may confidently write `5,490` for `5,400`. In accounting, a confident wrong number is worse than a missing one. GSTLens is built on four ideas:
 
