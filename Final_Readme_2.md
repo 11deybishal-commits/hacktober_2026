@@ -10,7 +10,7 @@
 
 ## The thesis :
 
-Most invoice-AI demos run OCR, pass the text to an LLM and print JSON. That works on a clean PDF but **fails silently on a handwritten invoice**, where a model may confidently write `5,490` for `5,400`. In accounting, a confident wrong number is worse than a missing one. GSTLens is built on four ideas:
+Most invoice-AI demos run OCR, pass the text to an LLM and print JSON. That works on a clean PDF but **fails silently on a handwritten invoice**, where a model may confidently write `5,490` for `5,400`. In accounting, a confident wrong number is worse than a missing one. GSTCheck+ is built on four ideas:
 
 1. **Open-source models are *perception*.** They read pixels and propose values; they are never trusted alone.
 2. **GST law and arithmetic are *truth*.** An invoice is a system of equations and format rules (GSTIN checksum, `taxable × rate = tax`, `CGST = SGST`, `Σ lines = totals`) that cannot hallucinate.
@@ -19,7 +19,7 @@ Most invoice-AI demos run OCR, pass the text to an LLM and print JSON. That work
 
 The answer to handwritten invoices isn't a bigger model; it's a **closed verification loop around small, open, locally-run models.**
 
-| A wrapper does… | GSTLens does… |
+| A wrapper does… | GSTCheck+ does… |
 |---|---|
 | One model call per file | A **router** picks the cheapest reliable path per document *and per region* |
 | Trusts model output | **12 deterministic GST rules** audit every field and relationship |
@@ -31,7 +31,7 @@ The answer to handwritten invoices isn't a bigger model; it's a **closed verific
 
 ## 1. Project Name
 
-**GSTLens** — a verification-first, open-source pipeline that turns any GST invoice (digital, printed or handwritten) into validated, machine-readable records. **Inputs:** `.xlsx`, `.csv`, `.pdf`, `.jpg/.jpeg`, `.png`. **Outputs:** JSON, CSV/XLSX, per-field confidence, validation report. **Inference:** fully local, open-weight models only.
+**GSTCheck+** — a verification-first, open-source pipeline that turns any GST invoice (digital, printed or handwritten) into validated, machine-readable records. **Inputs:** `.xlsx`, `.csv`, `.pdf`, `.jpg/.jpeg`, `.png`. **Outputs:** JSON, CSV/XLSX, per-field confidence, validation report. **Inference:** fully local, open-weight models only.
 
 ## 2. Problem Statement
 
