@@ -217,28 +217,8 @@ sequenceDiagram
 | **Scanned PDF / printed image** | Rasterize + preprocess → layout + OCR → structure → normalize → validate → repair if needed → export |
 | **Handwritten image** | Preprocess → layout + region classification → printed regions via OCR, handwritten as **field crops** → two independent reads per critical field (digit-only prompts) → agreement scoring → structure → validate → repair (≤2 loops) → flag unresolved → export |
 
-### 12.3 Canonical output schema (trimmed)
 
-```json
-{
-  "document_id": "uuid", "source_type": "handwritten_image",
-  "invoice": {
-    "invoice_number": "INV-2026-1042", "invoice_date": "2026-10-04",
-    "supplier": { "name": "", "gstin": "", "state_code": "27" },
-    "buyer":    { "name": "", "gstin": "", "state_code": "27" },
-    "place_of_supply": "27",
-    "line_items": [ { "description": "", "hsn_sac": "", "qty": 0, "rate": 0, "taxable_value": 0,
-                      "cgst_rate": 0, "cgst_amt": 0, "sgst_rate": 0, "sgst_amt": 0,
-                      "igst_rate": 0, "igst_amt": 0, "line_total": 0 } ],
-    "totals": { "taxable": 0, "cgst": 0, "sgst": 0, "igst": 0, "round_off": 0, "grand_total": 0 }
-  },
-  "field_confidence": { "supplier.gstin": 0.62 },
-  "validation": { "passed": false, "errors": [ { "rule": "GSTIN_CHECKSUM", "field": "supplier.gstin" } ] },
-  "needs_review": ["supplier.gstin"]
-}
-```
-
-### 12.4 The GST Validation Engine
+### 12.3 The GST Validation Engine
 
 | # | Rule | Logic | On failure |
 |---|---|---|---|
