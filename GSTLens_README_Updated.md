@@ -1,14 +1,4 @@
 # GSTLens
-
-### *Perception proposes. Arithmetic disposes.*
-
-**Hacktober Fest — Open Source AI Hackathon (Organized by Elevate)**
-**Track 3 — VYOM+ End-to-End AI-Powered GST Invoice Intelligence System**
-**Round: Qualifier (README-only technical proposal)**
-
-> **Team:** `[Team Name]` · `[Member 1]` · `[Member 2]` · `[Member 3]` · `[Member 4]`
-> **Planned license for the final repository:** Apache-2.0
-
 ---
 
 ## The thesis in 60 seconds
@@ -636,4 +626,4 @@ No labeled dataset is supplied, so we build our own test set: **synthetic invoic
 
 ---
 
-<sub>Qualifier submission note: this repository intentionally contains only `README.md`. No source code, datasets, notebooks, binaries or generated files are included. Implementation begins at the final hackathon.</sub>
+
