@@ -374,4 +374,3 @@ One command brings up model server, API and UI, fully offline on a single consum
 
 ---
 
-<sub>Qualifier submission note: this repository intentionally contains only `README.md`. No source code, datasets, notebooks, binaries or generated files are included. Implementation begins at the final hackathon.</sub>
