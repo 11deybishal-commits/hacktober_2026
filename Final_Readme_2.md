@@ -1,4 +1,4 @@
-# GSTLens
+# GSTCheck+
 
 ### *Perception proposes. Arithmetic disposes.*
 
