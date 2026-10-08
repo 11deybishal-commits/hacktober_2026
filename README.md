@@ -4,7 +4,7 @@
 
 **Hacktober Fest — Open Source AI Hackathon (Elevate)** · **Track 3 — VYOM+ End-to-End AI-Powered GST Invoice Intelligence System** · *Qualifier (README-only proposal)*
 
-> **Team:** `[Astra_X]` · `[Bishal Dey]` · `[Miheer Kulkarni]` · `[Wrichik Pau]` · **Planned license:** Apache-2.0
+> **Team:** `[Astra_X]` · `[Bishal Dey]` · `[Miheer Kulkarni]` · `[Wrichik Paul]` · **Planned license:** Apache-2.0
 
 ---
 
