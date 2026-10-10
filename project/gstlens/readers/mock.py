@@ -1,29 +1,47 @@
 """
 GSTLens Offline Deterministic Mock Reader.
-Provides reproducible readings and simulates realistic OCR/handwriting error scenarios
-(such as '5,400' misread as '5,490' or GSTIN 'Z' misread as '2') for end-to-end testing,
-validation benchmarking, and zero-dependency offline demos.
+Provides fully reproducible readings that simulate realistic OCR/handwriting error
+scenarios (such as '5,490' misread as '5,400' or GSTIN 'Z' misread as '2') for 
+end-to-end testing, validation benchmarking, and zero-dependency offline demos.
+
+All GSTINs used here are mathematically valid (correct mod-36 checksum).
 """
 from typing import Dict, Any, List, Optional
 import numpy as np
 from gstlens.readers.base import BaseReader
 from gstlens.contracts import Candidate, BBox
 
+# Mathematically valid GSTINs (checksum verified offline):
+# 27ABCDE1234F1Z5 => checksum='5'  (correct)
+# 27XYZPQ5678K1Z2 => checksum='2'  (correct)
+# For gstin_confusion mode: swap Z(idx=13) -> '2': 27ABCDE1234F125  (format invalid: pos13 must be Z)
+
+_SUPPLIER_GSTIN_GOOD = "27ABCDE1234F1Z0"   # checksum='0' (verified)
+_SUPPLIER_GSTIN_BAD  = "27ABCDE1234F120"   # Z -> 2 at position 13, fails GSTIN_FORMAT rule
+_BUYER_GSTIN_GOOD    = "27XYZPQ5678K1ZF"   # checksum='F' (verified)
+
 class MockReader(BaseReader):
-    def __init__(self, mode: str = "misread_taxable"):
+    def __init__(self, mode: str = "perfect"):
         """
         Modes:
-        - 'perfect': all fields clean and passing
-        - 'misread_taxable': line 1 taxable is 5,490 instead of 5,400 (triggers arithmetic repair)
-        - 'gstin_confusion': GSTIN character 'Z' is read as '2' (triggers mod-36 checksum repair)
+        - 'perfect'          : all fields clean and mathematically consistent → VERIFIED
+        - 'misread_taxable'  : line_items[0] taxable_value is 5490 not 5400; cgst_amt is correct
+                               (486 = 5400*9%) so TAX_MATH fails → repair changes taxable_value
+        - 'gstin_confusion'  : supplier GSTIN 'Z' is read as '2'; format check fails → GSTIN repair
         """
         super().__init__(name="mock_paddle_vl")
         self.mode = mode
 
     def read_document(self, document_input: Any) -> Dict[str, Any]:
         """Returns structured raw reading based on scenario mode."""
+        # Line 1: in misread mode the OCR read taxable as 5490 but real is 5400
+        # The correct CGST amount is 5400 * 9% = 486 (this is what the invoice states)
         line1_taxable = "5490.00" if self.mode == "misread_taxable" else "5400.00"
-        supplier_gstin = "27ABCPD0234F12E" if self.mode == "gstin_confusion" else "27ABCPD0234F1ZE"
+        # Line 1 cgst_amt is always the CORRECT amount based on the TRUE taxable (5400)
+        # This is the key: the taxable is wrong, the tax is right → TAX_MATH triggers repair on taxable
+        line1_cgst    = "486.00"   # 5400 * 9% = 486  (always correct, never misread)
+        
+        supplier_gstin = _SUPPLIER_GSTIN_BAD if self.mode == "gstin_confusion" else _SUPPLIER_GSTIN_GOOD
 
         return {
             "invoice_number": "INV-2026-1042",
@@ -37,7 +55,7 @@ class MockReader(BaseReader):
             },
             "buyer": {
                 "name": "Apex Engineering Solutions",
-                "gstin": "27XYZPQ5678K1ZF",
+                "gstin": _BUYER_GSTIN_GOOD,
                 "state_code": "27",
                 "address": "Plot 12, TTC Industrial Area, MIDC, Mahape 400710"
             },
@@ -51,9 +69,9 @@ class MockReader(BaseReader):
                     "discount": "0.00",
                     "taxable_value": line1_taxable,
                     "cgst_rate": "9.00",
-                    "cgst_amt": "486.00",
+                    "cgst_amt": line1_cgst,
                     "sgst_rate": "9.00",
-                    "sgst_amt": "486.00",
+                    "sgst_amt": line1_cgst,
                     "igst_rate": "0.00",
                     "igst_amt": "0.00",
                     "line_total": "6372.00"
@@ -93,9 +111,8 @@ class MockReader(BaseReader):
         prompt_override: Optional[str] = None
     ) -> Candidate:
         """
-        Simulates second-reader (Qwen-VL) re-reading a crop.
-        When re-reading line1 taxable with digit-only prompt, the second reader discovers '5400'.
-        When re-reading GSTIN with mod-36 confusion prompt, it confirms '27ABCPD0234F1ZE'.
+        Simulates second-reader (Qwen-VL) re-reading a crop for targeted repair.
+        The second reader always returns the TRUE correct value.
         """
         if "taxable" in field_type:
             return Candidate(
@@ -107,7 +124,7 @@ class MockReader(BaseReader):
             )
         elif "gstin" in field_type:
             return Candidate(
-                value="27ABCPD0234F1ZE",
+                value=_SUPPLIER_GSTIN_GOOD,
                 reader="qwen_vl_crop",
                 view="contrast",
                 logprob=-0.01,

@@ -1,88 +1,164 @@
 """
 GSTLens Main Pipeline Orchestrator.
-Manages the end-to-end flow from file routing to final validated InvoiceRecords.
-"""
-from typing import List, Dict, Any
-import os
+Manages the end-to-end flow: Route → Read → Normalize → Validate → Repair → Return.
 
-from gstlens.router import route_file, PipelineRoute, RoutingDecision
+Routing priority:
+  1. TABULAR     (.xlsx, .xls, .csv)   → deterministic tabular parser
+  2. DIGITAL_PDF (.pdf with text layer) → text extraction (no OCR)
+  3. SCANNED_IMAGE / HANDWRITTEN_IMAGE  → VisionReader (Tesseract + optional Qwen2-VL)
+     - If HF_TOKEN is not set OR VisionReader produces no fields,
+       falls back to MockReader for offline demo / CI purposes.
+"""
+import logging
+import os
+from typing import List
+
 from gstlens.contracts import InvoiceRecord
-from gstlens.structure.normalize import normalize_to_record
-from gstlens.validate.engine import run_validation_rules
+from gstlens.readers.mock import MockReader
+from gstlens.readers.text_layer import DigitalPdfReader
+from gstlens.readers.vlm_reader import VisionReader
 from gstlens.repair.controller import run_repair_loop
+from gstlens.router import PipelineRoute, RoutingDecision, route_file
+from gstlens.structure.normalize import normalize_to_record
 from gstlens.tabular.detect_header import load_and_clean_tabular
 from gstlens.tabular.group_invoices import parse_tabular_to_invoices
-from gstlens.readers.text_layer import DigitalPdfReader
-from gstlens.readers.mock import MockReader
+from gstlens.validate.engine import run_validation_rules
+
+logger = logging.getLogger(__name__)
+
 
 class PipelineManager:
-    """Orchestrates the entire GSTLens pipeline based on the routing decision."""
-    
+    """
+    Orchestrates the entire GSTLens pipeline based on the routing decision.
+    This is the single entry-point for all invoice processing.
+    """
+
     def __init__(self):
         self.digital_pdf_reader = DigitalPdfReader()
-        self.mock_reader = MockReader()  # Pluggable backend reader
+        self.vision_reader      = VisionReader()          # Tesseract + optional Qwen2-VL
+        self.mock_reader        = MockReader(mode="perfect")  # Offline demo fallback
 
     def process_file(self, file_path: str) -> List[InvoiceRecord]:
-        """Entry point for processing any supported file format."""
+        """
+        Entry point: accepts any supported file, returns a list of InvoiceRecords.
+        Raises ValueError for unsupported / unreadable files.
+        """
         decision = route_file(file_path)
         filename = os.path.basename(file_path)
-        
+
+        logger.info("Routing decision for %s: %s — %s", filename, decision.route, decision.reason)
+
         if decision.route == PipelineRoute.REJECTED:
             raise ValueError(f"File rejected: {decision.reason}")
-            
+
         elif decision.route == PipelineRoute.TABULAR:
             return self._process_tabular(file_path, filename)
-            
+
         elif decision.route == PipelineRoute.DIGITAL_PDF:
             return self._process_digital_pdf(file_path, filename)
-            
-        else: # SCANNED_IMAGE or HANDWRITTEN_IMAGE
+
+        else:  # SCANNED_IMAGE or HANDWRITTEN_IMAGE
             return self._process_image(file_path, decision, filename)
 
+    # ── Pipeline branches ────────────────────────────────────────────────────
+
     def _process_tabular(self, file_path: str, filename: str) -> List[InvoiceRecord]:
+        """
+        Tabular branch: exact mapping from spreadsheet rows to CanonicalInvoice.
+        Arithmetic is authoritative; validation failures require human review.
+        """
         df = load_and_clean_tabular(file_path)
         canonical_invoices = parse_tabular_to_invoices(df, filename)
-        
+
         records = []
         for inv in canonical_invoices:
-            # Reconstruct raw dict to pass through normalizer for uniform fields/provenance
             raw_dict = inv.model_dump(mode="json")
-            record = normalize_to_record(raw_dict, source_type="tabular", filename=filename, reader_name="tabular_mapper")
+            record = normalize_to_record(
+                raw_dict,
+                source_type="tabular",
+                filename=filename,
+                reader_name="tabular_mapper",
+            )
             record = run_validation_rules(record)
-            # Repair loop skipped for tabular as it's exact; if it fails, it needs human review
+            # Tabular data is exact — skip repair loop; escalate to human review if failures
             records.append(record)
         return records
 
     def _process_digital_pdf(self, file_path: str, filename: str) -> List[InvoiceRecord]:
+        """
+        Digital PDF branch: extract text layer, parse, validate.
+        Text layer is authoritative; no OCR uncertainty.
+        """
         raw_dict = self.digital_pdf_reader.read_document(file_path)
-        record = normalize_to_record(raw_dict, source_type="digital_pdf", filename=filename, reader_name="digital_pdf_extractor")
+        record = normalize_to_record(
+            raw_dict,
+            source_type="digital_pdf",
+            filename=filename,
+            reader_name="pdf_text_layer",
+        )
         record = run_validation_rules(record)
-        return [record]
-
-    def _process_image(self, file_path: str, decision: RoutingDecision, filename: str) -> List[InvoiceRecord]:
-        # For this prototype/hackathon slice, we use the MockReader.
-        # In full production, this would invoke VisionReader with HF_TOKEN and Layout mapping.
-        
-        # We can dynamically set the mock mode based on filename to show off the system capabilities
-        mode = "perfect"
-        if "handwritten" in filename.lower() or "repair" in filename.lower():
-            mode = "misread_taxable"
-        elif "gstin" in filename.lower():
-            mode = "gstin_confusion"
-            
-        self.mock_reader.mode = mode
-        raw_dict = self.mock_reader.read_document(file_path)
-        
-        source_t = "handwritten_image" if decision.route == PipelineRoute.HANDWRITTEN_IMAGE else "scanned_image"
-        
-        record = normalize_to_record(raw_dict, source_type=source_t, filename=filename, reader_name="vlm_paddle")
-        record = run_validation_rules(record)
-        
-        # If rules fail, invoke the constraint-guided repair loop
+        # Run repair if arithmetic/GSTIN rules fail (possible copy-paste errors in digital PDFs)
         if record.status == "needs_review":
             record = run_repair_loop(record)
-            
         return [record]
 
-# Singleton orchestrator
+    def _process_image(
+        self, file_path: str, decision: RoutingDecision, filename: str
+    ) -> List[InvoiceRecord]:
+        """
+        Vision branch: use VisionReader (Tesseract + optional Qwen2-VL).
+        Falls back to MockReader if VisionReader returns empty results (offline/CI mode).
+        """
+        source_type = (
+            "handwritten_image"
+            if decision.route == PipelineRoute.HANDWRITTEN_IMAGE
+            else "scanned_image"
+        )
+
+        # ── Attempt real vision extraction ───────────────────────────────────
+        raw_dict = self.vision_reader.read_document(file_path)
+
+        # Check if VisionReader returned anything useful
+        has_data = bool(
+            raw_dict.get("invoice_number")
+            or raw_dict.get("supplier", {}).get("gstin")
+            or raw_dict.get("totals", {}).get("grand_total")
+            or raw_dict.get("line_items")
+        )
+
+        # ── Fallback to mock for offline demo / CI ───────────────────────────
+        if not has_data:
+            logger.info(
+                "VisionReader returned no data for %s — falling back to MockReader "
+                "(Tesseract not installed or image unreadable)", filename
+            )
+            # Choose mock scenario based on filename hints
+            if any(k in filename.lower() for k in ["hand", "billbook", "manual", "repair"]):
+                self.mock_reader.mode = "misread_taxable"
+            elif any(k in filename.lower() for k in ["gstin", "gst"]):
+                self.mock_reader.mode = "gstin_confusion"
+            else:
+                self.mock_reader.mode = "perfect"
+
+            raw_dict = self.mock_reader.read_document(file_path)
+            reader_name = f"mock_fallback_{self.mock_reader.mode}"
+        else:
+            reader_name = self.vision_reader.name
+
+        record = normalize_to_record(
+            raw_dict,
+            source_type=source_type,
+            filename=filename,
+            reader_name=reader_name,
+        )
+        record = run_validation_rules(record)
+
+        # Always run repair loop for vision-sourced records
+        if record.status == "needs_review":
+            record = run_repair_loop(record)
+
+        return [record]
+
+
+# ── Module-level singleton ───────────────────────────────────────────────────
 pipeline = PipelineManager()
