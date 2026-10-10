@@ -11,3 +11,6 @@ license = {text = "Apache-2.0"}
 
 [tool.setuptools]
 packages = ["gstlens", "backend"]
+
+[tool.vercel]
+entrypoint = "gstlens.api:app"
