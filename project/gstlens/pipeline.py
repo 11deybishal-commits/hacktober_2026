@@ -117,27 +117,34 @@ class PipelineManager:
             else "scanned_image"
         )
 
-        # ── Attempt real vision extraction with PaddleReader (RapidOCR PP-OCRv4) ──
-        raw_dict = self.paddle_reader.read_document(file_path) if self.paddle_reader is not None else {}
-        reader_name = getattr(self.paddle_reader, "name", "paddle_vl")
-        quality_score = getattr(self.paddle_reader, "last_quality_score", 1.0)
+        # ── Attempt real vision extraction with VisionReader (Qwen2-VL) if HF_TOKEN is set ──
+        raw_dict = {}
+        reader_name = "paddle_vl"
+        quality_score = 1.0
 
-        # Check if PaddleReader returned extracted fields
+        if self.vision_reader is not None and getattr(self.vision_reader, "hf_token", ""):
+            logger.info("HF_TOKEN detected — attempting Qwen2-VL multimodal extraction for %s", filename)
+            v_dict = self.vision_reader.read_document(file_path)
+            if v_dict and (v_dict.get("invoice_number") or v_dict.get("supplier", {}).get("gstin") or v_dict.get("totals", {}).get("grand_total")):
+                raw_dict = v_dict
+                reader_name = self.vision_reader.name
+                quality_score = getattr(self.vision_reader, "last_quality_score", quality_score)
+
+        # ── Fallback / Augment with PaddleReader (RapidOCR PP-OCRv4) ──
+        if not raw_dict and self.paddle_reader is not None:
+            p_dict = self.paddle_reader.read_document(file_path)
+            if p_dict:
+                raw_dict = p_dict
+                reader_name = getattr(self.paddle_reader, "name", "paddle_vl")
+                quality_score = getattr(self.paddle_reader, "last_quality_score", quality_score)
+
+        # Check if real extraction produced fields
         has_data = bool(
             raw_dict.get("invoice_number")
             or raw_dict.get("supplier", {}).get("gstin")
             or raw_dict.get("totals", {}).get("grand_total")
             or (raw_dict.get("line_items") and len(raw_dict["line_items"]) > 0)
         )
-
-        # Fallback to VisionReader (Tesseract / Qwen2-VL) if PaddleReader had no data
-        if not has_data and self.vision_reader is not None:
-            v_dict = self.vision_reader.read_document(file_path)
-            if v_dict and (v_dict.get("invoice_number") or v_dict.get("supplier", {}).get("gstin") or v_dict.get("totals", {}).get("grand_total")):
-                raw_dict = v_dict
-                reader_name = self.vision_reader.name
-                quality_score = getattr(self.vision_reader, "last_quality_score", quality_score)
-                has_data = True
 
         # ── Fallback to mock for offline synthetic tests / CI ───────────────
         if not has_data:

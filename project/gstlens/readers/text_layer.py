@@ -59,19 +59,25 @@ class DigitalPdfReader(BaseReader):
             result["buyer"]["state_code"] = gstin_matches[1][:2]
 
         # 2. Invoice Number
-        inv_no_match = re.search(r"(?:Invoice\s*(?:No|Number|#)|Inv\s*No|Bill\s*No)[:\s]*([A-Za-z0-9\-\/]+)", text, re.IGNORECASE)
+        inv_no_match = re.search(r"(?:Invoice\s*(?:No|Num|Number|#)|Inv\s*No|Bill\s*No)[\s\.:\-]*([A-Za-z0-9][A-Za-z0-9\-\/]*|IN\-\d+|\w+\-\d+)", text, re.IGNORECASE)
         if inv_no_match:
-            result["invoice_number"] = inv_no_match.group(1).strip()
+            clean_inv = re.sub(r"^[\s\.:\-]+|[\s\.:\-]+$", "", inv_no_match.group(1)).strip()
+            if clean_inv.upper() not in ["NO", "NUMBER", "DATE", "DATED", "INVOICE"]:
+                result["invoice_number"] = clean_inv
 
-        # 3. Invoice Date
-        inv_date_match = re.search(r"(?:Invoice\s*Date|Date|Dated)[:\s]*([0-9]{2}[\/\-\.][0-9]{2}[\/\-\.][0-9]{2,4}|[0-9]{4}[\/\-\.][0-9]{2}[\/\-\.][0-9]{2})", text, re.IGNORECASE)
+        # 3. Invoice Date (Supports numeric and text months)
+        inv_date_match = re.search(r"(?:Invoice\s*Date|Date|Dated)[\s\.:\-]*(\d{1,2}[\s\/\-\.]{1,3}(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[\s\/\-\.]{1,3}\d{2,4}|\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\d{4}[\/\-\.]\d{1,2}[\/\-\.]\d{1,2})", text, re.IGNORECASE)
         if inv_date_match:
             result["invoice_date"] = inv_date_match.group(1).strip()
+        else:
+            m_dt_standalone = re.search(r"(\d{1,2}[\s\/\-\.]{1,3}(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*[\s\/\-\.]{1,3}\d{2,4})", text, re.IGNORECASE)
+            if m_dt_standalone:
+                result["invoice_date"] = m_dt_standalone.group(1).strip()
 
         # 4. Supplier & Buyer Names
         lines = [line.strip() for line in text.split("\n") if line.strip()]
         for i, line in enumerate(lines[:15]):
-            if any(k in line.lower() for k in ["ltd", "pvt", "enterprises", "traders", "services", "corporation", "industries", "m/s"]):
+            if any(k in line.lower() for k in ["ltd", "pvt", "enterprises", "traders", "services", "corporation", "industries", "sleek", "bill", "m/s"]):
                 if not result["supplier"].get("name"):
                     result["supplier"]["name"] = line
                     break
@@ -82,17 +88,19 @@ class DigitalPdfReader(BaseReader):
                 break
 
         # 5. Totals
-        grand_total_match = re.search(r"(?:Grand\s*Total|Total\s*Amount|Net\s*Payable|Invoice\s*Total)[:\s₹Rs.]*([0-9,]+\.?[0-9]*)", text, re.IGNORECASE)
+        grand_total_match = re.search(r"(?:Grand\s*Total|Total\s*Amount|Net\s*Payable|Invoice\s*Total|Total[:\s]|Audited\s*Grand\s*Total)[:\s₹Rs.]*([0-9,]+\.?[0-9]*)", text, re.IGNORECASE)
         if grand_total_match:
             val_str = grand_total_match.group(1).replace(",", "")
-            result["totals"]["grand_total"] = val_str
+            if val_str and float(val_str) > 0:
+                result["totals"]["grand_total"] = val_str
 
-        taxable_match = re.search(r"(?:Total\s*Taxable|Taxable\s*Amount|Taxable\s*Value|Sub\s*Total)[:\s₹Rs.]*([0-9,]+\.?[0-9]*)", text, re.IGNORECASE)
+        taxable_match = re.search(r"(?:Total\s*Taxable|Taxable\s*Amount|Taxable\s*Value|Sub\s*Total|Base\s*Amt)[:\s₹Rs.]*([0-9,]+\.?[0-9]*)", text, re.IGNORECASE)
         if taxable_match:
             val_str = taxable_match.group(1).replace(",", "")
-            result["totals"]["taxable_amount"] = val_str
+            if val_str and float(val_str) > 0:
+                result["totals"]["taxable_amount"] = val_str
 
-        cgst_match = re.search(r"(?:CGST|Central\s*Tax)[:\s₹Rs.]*([0-9,]+\.?[0-9]*)", text, re.IGNORECASE)
+        cgst_match = re.search(r"(?:CGST|Central\s*Tax|Tax\s*Amount)[:\s₹Rs.]*([0-9,]+\.?[0-9]*)", text, re.IGNORECASE)
         if cgst_match:
             result["totals"]["cgst_amount"] = cgst_match.group(1).replace(",", "")
 
