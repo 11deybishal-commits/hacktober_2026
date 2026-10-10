@@ -150,7 +150,7 @@ def route_file(file_path: str) -> RoutingDecision:
     # 3. Raster Images
     if mime_type.startswith("image/") or ext in [".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tiff"]:
         # Check if filename hints handwriting or route to SCANNED_IMAGE
-        is_handwritten_hint = any(keyword in os.path.basename(file_path).lower() for keyword in ["hand", "billbook", "manual", "pad"])
+        is_handwritten_hint = any(keyword in os.path.basename(file_path).lower() for keyword in ["handwritten", "billbook", "manual_bill"])
         route = PipelineRoute.HANDWRITTEN_IMAGE if is_handwritten_hint else PipelineRoute.SCANNED_IMAGE
         return RoutingDecision(
             file_path=file_path,
