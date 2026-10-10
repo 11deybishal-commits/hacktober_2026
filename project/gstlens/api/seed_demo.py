@@ -4,6 +4,7 @@ Generates 3 deterministic benchmark invoices (Verified, Repaired, Needs Review)
 with SVG documents, accurate bounding boxes, rule explanations, and repair histories.
 """
 import os
+import tempfile
 from decimal import Decimal
 from typing import Dict, Tuple
 
@@ -20,7 +21,7 @@ from gstlens.contracts import (
     RuleResult,
 )
 
-TEMP_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "temp_uploads")
+TEMP_DIR = os.path.join(tempfile.gettempdir(), "gstlens", "temp_uploads")
 os.makedirs(TEMP_DIR, exist_ok=True)
 
 

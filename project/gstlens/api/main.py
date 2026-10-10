@@ -13,6 +13,7 @@ Provides REST endpoints and serves the sophisticated GSTLens Audit UI with:
 """
 import os
 import sys
+import tempfile
 import uuid
 import json
 import logging
@@ -53,7 +54,7 @@ app.add_middleware(
 # In-memory session store
 RECORDS_STORE: Dict[str, InvoiceRecord] = {}
 DOCUMENT_FILES: Dict[str, str] = {}
-TEMP_UPLOAD_DIR = os.path.join(PROJECT_ROOT, "temp_uploads")
+TEMP_UPLOAD_DIR = os.path.join(tempfile.gettempdir(), "gstlens", "temp_uploads")
 os.makedirs(TEMP_UPLOAD_DIR, exist_ok=True)
 
 
