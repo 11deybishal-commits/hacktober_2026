@@ -5,7 +5,33 @@ Maps source spreadsheet column headers to canonical GST invoice fields.
 from typing import Dict, Any, List, Optional
 import re
 import pandas as pd
-from rapidfuzz import fuzz, process
+try:
+    from rapidfuzz import fuzz, process
+except ImportError:
+    import difflib
+    class _FuzzFallback:
+        @staticmethod
+        def ratio(s1, s2):
+            return difflib.SequenceMatcher(None, str(s1).lower(), str(s2).lower()).ratio() * 100
+        @staticmethod
+        def partial_ratio(s1, s2):
+            s1, s2 = str(s1).lower(), str(s2).lower()
+            if s1 in s2 or s2 in s1:
+                return 100.0
+            return difflib.SequenceMatcher(None, s1, s2).ratio() * 100
+    fuzz = _FuzzFallback()
+    class _ProcessFallback:
+        @staticmethod
+        def extractOne(query, choices, scorer=None, score_cutoff=0):
+            best = None
+            best_score = score_cutoff
+            for c in choices:
+                score = (scorer or fuzz.ratio)(query, c)
+                if score > best_score:
+                    best_score = score
+                    best = (c, score)
+            return best
+    process = _ProcessFallback()
 
 CANONICAL_SYNONYMS = {
     "invoice_number": ["inv no", "invoice no", "inv #", "bill no", "invoice number", "invoice_no"],
@@ -60,16 +86,32 @@ def map_column_name(col_name: str, sample_values: Optional[List[Any]] = None) ->
     return None
 
 def clean_numeric_value(val: Any) -> Optional[float]:
-    """Coerces strings like '₹ 5,400/-' or '(500)' into clean float."""
-    if pd.isna(val):
+    """Coerces strings like '₹ 5,400.00/-' or '(500)' into clean float."""
+    if val is None or pd.isna(val):
         return None
     if isinstance(val, (int, float)):
         return float(val)
     
     val_str = str(val).strip()
-    # Strip currency symbols, commas, and trailing / -
-    cleaned = re.sub(r"[₹$Rs.,\/\-\s]", "", val_str)
+
+    # Strip currency symbols and trailing /- first
+    val_str = re.sub(r"(?i)[₹$€£]|rs\.?|inr", "", val_str).strip()
+    val_str = re.sub(r"/-\s*$", "", val_str).strip()
+
+    is_negative = False
+    if val_str.startswith("(") and val_str.endswith(")"):
+        is_negative = True
+        val_str = val_str[1:-1].strip()
+    elif val_str.startswith("-"):
+        is_negative = True
+        val_str = val_str[1:].strip()
+    elif val_str.endswith("-"):
+        is_negative = True
+        val_str = val_str[:-1].strip()
+
+    val_str = val_str.replace(",", "").replace("/", "").strip()
     try:
-        return float(cleaned)
+        f = float(val_str)
+        return -f if is_negative else f
     except ValueError:
         return None

@@ -24,22 +24,21 @@ class MockReader(BaseReader):
     def __init__(self, mode: str = "perfect"):
         """
         Modes:
-        - 'perfect'          : all fields clean and mathematically consistent → VERIFIED
-        - 'misread_taxable'  : line_items[0] taxable_value is 5490 not 5400; cgst_amt is correct
-                               (486 = 5400*9%) so TAX_MATH fails → repair changes taxable_value
-        - 'gstin_confusion'  : supplier GSTIN 'Z' is read as '2'; format check fails → GSTIN repair
+        - 'perfect'                : all fields clean and mathematically consistent → VERIFIED
+        - 'misread_taxable'        : line_items[0] taxable_value is 5490 not 5400; cgst_amt is correct
+                                     (486 = 5400*9%) so TAX_MATH fails → repair changes taxable_value
+        - 'gstin_confusion'        : supplier GSTIN 'Z' is read as '2'; format check fails → GSTIN repair
+        - 'adversarial_arithmetic' : paper itself has arithmetic slips (CGST written 468, Grand total 13,425);
+                                     crop re-reads confirm paper value, so system safely refuses to guess → NEEDS_REVIEW
         """
         super().__init__(name="mock_paddle_vl")
         self.mode = mode
 
     def read_document(self, document_input: Any) -> Dict[str, Any]:
         """Returns structured raw reading based on scenario mode."""
-        # Line 1: in misread mode the OCR read taxable as 5490 but real is 5400
-        # The correct CGST amount is 5400 * 9% = 486 (this is what the invoice states)
         line1_taxable = "5490.00" if self.mode == "misread_taxable" else "5400.00"
-        # Line 1 cgst_amt is always the CORRECT amount based on the TRUE taxable (5400)
-        # This is the key: the taxable is wrong, the tax is right → TAX_MATH triggers repair on taxable
-        line1_cgst    = "486.00"   # 5400 * 9% = 486  (always correct, never misread)
+        line1_cgst    = "468.00" if self.mode == "adversarial_arithmetic" else "486.00"
+        grand_total   = "13425.00" if self.mode == "adversarial_arithmetic" else "13452.00"
         
         supplier_gstin = _SUPPLIER_GSTIN_BAD if self.mode == "gstin_confusion" else _SUPPLIER_GSTIN_GOOD
 
@@ -99,7 +98,7 @@ class MockReader(BaseReader):
                 "sgst_amount": "1026.00",
                 "igst_amount": "0.00",
                 "round_off": "0.00",
-                "grand_total": "13452.00",
+                "grand_total": grand_total,
                 "amount_in_words": "Rupees Thirteen Thousand Four Hundred Fifty Two Only"
             }
         }
@@ -112,8 +111,19 @@ class MockReader(BaseReader):
     ) -> Candidate:
         """
         Simulates second-reader (Qwen-VL) re-reading a crop for targeted repair.
-        The second reader always returns the TRUE correct value.
+        In adversarial mode, re-reads confirm the paper itself is written wrong (468.00),
+        meaning there is zero perceptual support for implied backsolves -> safely flagged!
         """
+        if self.mode == "adversarial_arithmetic":
+            # Re-reading the crop confirms what was physically written on the paper
+            return Candidate(
+                value="468.00" if "tax" in field_type else "13425.00",
+                reader="qwen_vl_crop",
+                view="upscaled",
+                logprob=-0.01,
+                legible=True
+            )
+
         if "taxable" in field_type:
             return Candidate(
                 value="5400.00",

@@ -16,7 +16,7 @@ from typing import List
 from gstlens.contracts import InvoiceRecord
 from gstlens.readers.mock import MockReader
 from gstlens.readers.text_layer import DigitalPdfReader
-from gstlens.readers.vlm_reader import VisionReader
+from gstlens.readers import VisionReader
 from gstlens.repair.controller import run_repair_loop
 from gstlens.router import PipelineRoute, RoutingDecision, route_file
 from gstlens.structure.normalize import normalize_to_record
@@ -35,7 +35,7 @@ class PipelineManager:
 
     def __init__(self):
         self.digital_pdf_reader = DigitalPdfReader()
-        self.vision_reader      = VisionReader()          # Tesseract + optional Qwen2-VL
+        self.vision_reader      = VisionReader() if VisionReader is not None else None
         self.mock_reader        = MockReader(mode="perfect")  # Offline demo fallback
 
     def process_file(self, file_path: str) -> List[InvoiceRecord]:
@@ -116,7 +116,7 @@ class PipelineManager:
         )
 
         # ── Attempt real vision extraction ───────────────────────────────────
-        raw_dict = self.vision_reader.read_document(file_path)
+        raw_dict = self.vision_reader.read_document(file_path) if self.vision_reader is not None else {}
 
         # Check if VisionReader returned anything useful
         has_data = bool(
@@ -149,6 +149,7 @@ class PipelineManager:
             raw_dict,
             source_type=source_type,
             filename=filename,
+            quality_score=getattr(self.vision_reader, "last_quality_score", 1.0),
             reader_name=reader_name,
         )
         record = run_validation_rules(record)

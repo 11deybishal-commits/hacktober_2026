@@ -3,8 +3,21 @@ GSTLens Anchor Detector.
 Fuzzy matching of printed invoice headers and labels to anchor handwritten and printed value cells.
 """
 from typing import List, Dict, Tuple, Optional
-import rapidfuzz
-from rapidfuzz import fuzz
+try:
+    from rapidfuzz import fuzz
+except ImportError:
+    import difflib
+    class _FuzzFallback:
+        @staticmethod
+        def ratio(s1, s2):
+            return difflib.SequenceMatcher(None, str(s1).lower(), str(s2).lower()).ratio() * 100
+        @staticmethod
+        def partial_ratio(s1, s2):
+            s1, s2 = str(s1).lower(), str(s2).lower()
+            if s1 in s2 or s2 in s1:
+                return 100.0
+            return difflib.SequenceMatcher(None, s1, s2).ratio() * 100
+    fuzz = _FuzzFallback()
 
 # Key anchor patterns
 DEFAULT_ANCHORS = {
