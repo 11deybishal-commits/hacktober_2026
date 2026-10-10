@@ -22,11 +22,12 @@ MAX_LOOPS = 3
 
 # Reader priority order: higher = more trusted
 _READER_PRIORITY = {
-    "solver_gstin_confusion":     10,
-    "solver_tax_math_backsolve":  9,
-    "solver_line_sum_backsolve":  8,
-    "qwen_vl_crop":               7,
-    "vlm_paddle_hf":              6,
+    "solver_gstin_confusion":         10,
+    "solver_tax_symmetry_backsolve":  9,
+    "solver_tax_math_backsolve":      9,
+    "solver_line_sum_backsolve":      8,
+    "qwen_vl_crop":                   7,
+    "vlm_paddle_hf":                  6,
 }
 
 
@@ -153,6 +154,11 @@ def _apply_to_invoice_model(record: InvoiceRecord, field_path: str, value: str):
             }
             if attr in decimal_fields:
                 setattr(inv.line_items[idx], attr, Decimal(value))
+                # Sync total tax if line tax was repaired
+                if attr == "cgst_amt":
+                    inv.totals.cgst_amount = sum(Decimal(str(li.cgst_amt or 0)) for li in inv.line_items)
+                elif attr == "sgst_amt":
+                    inv.totals.sgst_amount = sum(Decimal(str(li.sgst_amt or 0)) for li in inv.line_items)
             else:
                 setattr(inv.line_items[idx], attr, value)
             return

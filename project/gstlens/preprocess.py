@@ -148,11 +148,13 @@ def deskew_image(image: np.ndarray) -> np.ndarray:
 
     angles = []
     for line in lines:
-        x1, y1, x2, y2 = line[0]
-        angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
-        # Keep horizontal-ish lines
-        if abs(angle) < 45:
-            angles.append(angle)
+        coords = line[0] if (hasattr(line, "__len__") and len(line) == 1 and hasattr(line[0], "__len__")) else line
+        if hasattr(coords, "__len__") and len(coords) == 4:
+            x1, y1, x2, y2 = coords
+            angle = np.degrees(np.arctan2(y2 - y1, x2 - x1))
+            # Keep horizontal-ish lines
+            if abs(angle) < 45:
+                angles.append(angle)
 
     if not angles:
         return image

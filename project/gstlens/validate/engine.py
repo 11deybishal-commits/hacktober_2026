@@ -77,6 +77,29 @@ def run_validation_rules(record: InvoiceRecord) -> InvoiceRecord:
                      "Inter-state supply (IGST applicable)")
         ))
 
+    # ── Rule 4: TAX_SYMMETRY (Intra-state CGST == SGST equivalence) ──────────
+    for i, line in enumerate(inv.line_items):
+        if line.cgst_amt is not None and line.sgst_amt is not None:
+            c = _dec(line.cgst_amt)
+            s = _dec(line.sgst_amt)
+            if c > 0 or s > 0:
+                is_sym = (c == s)
+                # Compute statutory symmetric expected tax
+                expected_c = str(round(_dec(line.taxable_value) * _dec(line.cgst_rate or 9) / Decimal("100"), 2)) if line.taxable_value else str(c)
+                expected_s = str(round(_dec(line.taxable_value) * _dec(line.sgst_rate or 9) / Decimal("100"), 2)) if line.taxable_value else str(c)
+                rules.append(RuleResult(
+                    rule_id=4, rule_name="TAX_SYMMETRY",
+                    passed=is_sym, severity="hard",
+                    implicated_fields=[f"line_items[{i}].cgst_amt", f"line_items[{i}].sgst_amt"],
+                    message=(f"Line {i+1} tax symmetric: CGST {c} == SGST {s}"
+                             if is_sym else
+                             f"Line {i+1} tax ASYMMETRY: CGST {c} ≠ SGST {s} (diff={abs(c-s):.2f})"),
+                    expected_values={
+                        f"line_items[{i}].cgst_amt": expected_c,
+                        f"line_items[{i}].sgst_amt": expected_s,
+                    } if not is_sym else {}
+                ))
+
     # ── Rule 5: Invoice Date Parseable ───────────────────────────────────────
     if inv.invoice_date:
         date_valid = bool(re.match(
@@ -116,11 +139,11 @@ def run_validation_rules(record: InvoiceRecord) -> InvoiceRecord:
             rules.append(RuleResult(
                 rule_id=6, rule_name="TAX_MATH",
                 passed=passed, severity="hard",
-                implicated_fields=[f"line_items[{i}].taxable_value"],
+                implicated_fields=[f"line_items[{i}].taxable_value", f"line_items[{i}].cgst_amt"],
                 message=(f"Line {i+1} tax math valid: {taxable} × {rate}% = {expected_tax:.2f}"
                          if passed else
                          f"Line {i+1} tax MISMATCH: {taxable} × {rate}% = {expected_tax:.2f} "
-                         f"but printed tax = {actual_tax}. Suspected OCR error in taxable_value."),
+                         f"but printed tax = {actual_tax}. Suspected OCR error in taxable_value or tax amount."),
                 expected_values={f"line_items[{i}].taxable_value": correct_taxable} if correct_taxable else {}
             ))
 

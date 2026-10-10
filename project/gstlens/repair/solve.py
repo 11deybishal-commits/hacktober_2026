@@ -45,10 +45,26 @@ def generate_hypotheses(record: InvoiceRecord, suspect_fields: List[str]) -> Dic
 
     # ── Strategy 2: TAX_MATH back-calculation ───────────────────────────────
     # Find the TAX_MATH rule failures and use their expected_values
+    import re
+    from decimal import Decimal
     for rule in record.rules:
         if not rule.passed and rule.rule_name == "TAX_MATH" and rule.expected_values:
             for field_path, expected_val in rule.expected_values.items():
                 if field_path in hypotheses:
+                    # Consistency check (WORKING.md §4.1 & §4.4):
+                    # Verify expected_val converges with qty * rate if both exist.
+                    # An invoice arithmetic error on paper (writer's slip) must not be silently forced.
+                    m = re.match(r"line_items\[(\d+)\]\.taxable_value", field_path)
+                    if m:
+                        idx = int(m.group(1))
+                        if idx < len(record.invoice.line_items):
+                            li = record.invoice.line_items[idx]
+                            if li.qty and li.rate:
+                                qr_val = Decimal(str(li.qty)) * Decimal(str(li.rate))
+                                if abs(qr_val - Decimal(str(expected_val))) > Decimal("1.00"):
+                                    # Contradiction: qty*rate contradicts tax backsolve.
+                                    # Paper itself disagrees; do not hallucinate an unproven number.
+                                    continue
                     hypotheses[field_path].append(Candidate(
                         value=expected_val,
                         reader="solver_tax_math_backsolve",
@@ -73,5 +89,17 @@ def generate_hypotheses(record: InvoiceRecord, suspect_fields: List[str]) -> Dic
                     view="derived",
                     legible=True
                 ))
+
+    # ── Strategy 4: TAX_SYMMETRY back-calculation ────────────────────────────
+    for rule in record.rules:
+        if not rule.passed and rule.rule_name == "TAX_SYMMETRY" and rule.expected_values:
+            for field_path, expected_val in rule.expected_values.items():
+                if field_path in hypotheses and expected_val:
+                    hypotheses[field_path].append(Candidate(
+                        value=expected_val,
+                        reader="solver_tax_symmetry_backsolve",
+                        view="derived",
+                        legible=True
+                    ))
 
     return hypotheses

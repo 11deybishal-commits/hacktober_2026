@@ -151,13 +151,31 @@ svg_gstin_error = make_invoice_svg(
 res3 = upload_file("gstin_error_scan.svg", svg_gstin_error)
 print("Uploaded GSTIN Error Invoice:", res3.get("status"))
 
-# 4. Upload CSV
+# 4. Adversarial Handwritten Bill-Book (Writer's Arithmetic Slip on Paper)
+svg_adversarial = make_invoice_svg(
+    title="ADVERSARIAL BILL — WRITER'S SLIP",
+    inv_no="INV-2026-1042",
+    date="04/10/2026",
+    sup_name="Shree Ganesh Traders (Adversarial)",
+    sup_gstin="27ABCDE1234F1Z0",
+    buy_name="Apex Engineering Solutions",
+    buy_gstin="27XYZPQ5678K1ZF",
+    item1_name="Hex Bolts M10",
+    item1_val="5,400.00",
+    item1_tax="468.00",  # Writer wrote 468 on paper instead of 486
+    total_val="13,425.00", # Transposed total written on paper
+    is_handwritten=True
+).encode("utf-8")
+res4 = upload_file("adv_0991_writers_slip.svg", svg_adversarial)
+print("Uploaded Adversarial Bill:", res4.get("status"))
+
+# 5. Upload CSV
 csv_data = (
     "Inv No,Bill Dt,Party GST No,Item,HSN,Qty,Rate,Taxable Amt,CGST Amt,SGST Amt\n"
     "INV/26/118,2026-10-04,27XYZPQ5678K1ZF,Hex Bolts M10,7318,12,450,5400.00,486.00,486.00\n"
     "INV/26/119,2026-10-04,27XYZPQ5678K1ZF,Steel Brackets,7326,5,1200,6000.00,540.00,540.00\n"
 ).encode("utf-8")
-res4 = upload_file("sales_september.csv", csv_data, "text/csv")
-print("Uploaded CSV:", res4.get("status"))
+res5 = upload_file("sales_september.csv", csv_data, "text/csv")
+print("Uploaded CSV:", res5.get("status"))
 
-print("\nLive demo refreshed with real document image previews!")
+print("\nLive demo refreshed with real document image previews & honest status badges!")

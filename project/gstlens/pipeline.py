@@ -16,6 +16,7 @@ from typing import List
 from gstlens.contracts import InvoiceRecord
 from gstlens.readers.mock import MockReader
 from gstlens.readers.text_layer import DigitalPdfReader
+from gstlens.readers.paddle import PaddleReader
 from gstlens.readers import VisionReader
 from gstlens.repair.controller import run_repair_loop
 from gstlens.router import PipelineRoute, RoutingDecision, route_file
@@ -35,6 +36,7 @@ class PipelineManager:
 
     def __init__(self):
         self.digital_pdf_reader = DigitalPdfReader()
+        self.paddle_reader      = PaddleReader()
         self.vision_reader      = VisionReader() if VisionReader is not None else None
         self.mock_reader        = MockReader(mode="perfect")  # Offline demo fallback
 
@@ -115,25 +117,37 @@ class PipelineManager:
             else "scanned_image"
         )
 
-        # ── Attempt real vision extraction ───────────────────────────────────
-        raw_dict = self.vision_reader.read_document(file_path) if self.vision_reader is not None else {}
+        # ── Attempt real vision extraction with PaddleReader (RapidOCR PP-OCRv4) ──
+        raw_dict = self.paddle_reader.read_document(file_path) if self.paddle_reader is not None else {}
+        reader_name = getattr(self.paddle_reader, "name", "paddle_vl")
+        quality_score = getattr(self.paddle_reader, "last_quality_score", 1.0)
 
-        # Check if VisionReader returned anything useful
+        # Check if PaddleReader returned extracted fields
         has_data = bool(
             raw_dict.get("invoice_number")
             or raw_dict.get("supplier", {}).get("gstin")
             or raw_dict.get("totals", {}).get("grand_total")
-            or raw_dict.get("line_items")
+            or (raw_dict.get("line_items") and len(raw_dict["line_items"]) > 0)
         )
 
-        # ── Fallback to mock for offline demo / CI ───────────────────────────
+        # Fallback to VisionReader (Tesseract / Qwen2-VL) if PaddleReader had no data
+        if not has_data and self.vision_reader is not None:
+            v_dict = self.vision_reader.read_document(file_path)
+            if v_dict and (v_dict.get("invoice_number") or v_dict.get("supplier", {}).get("gstin") or v_dict.get("totals", {}).get("grand_total")):
+                raw_dict = v_dict
+                reader_name = self.vision_reader.name
+                quality_score = getattr(self.vision_reader, "last_quality_score", quality_score)
+                has_data = True
+
+        # ── Fallback to mock for offline synthetic tests / CI ───────────────
         if not has_data:
             logger.info(
-                "VisionReader returned no data for %s — falling back to MockReader "
-                "(Tesseract not installed or image unreadable)", filename
+                "Real vision readers returned no data for %s — falling back to MockReader", filename
             )
             # Choose mock scenario based on filename hints
-            if any(k in filename.lower() for k in ["hand", "billbook", "manual", "repair"]):
+            if any(k in filename.lower() for k in ["adv", "slip", "mismatch"]):
+                self.mock_reader.mode = "adversarial_arithmetic"
+            elif any(k in filename.lower() for k in ["hand", "billbook", "manual", "repair"]):
                 self.mock_reader.mode = "misread_taxable"
             elif any(k in filename.lower() for k in ["gstin", "gst"]):
                 self.mock_reader.mode = "gstin_confusion"
@@ -142,14 +156,12 @@ class PipelineManager:
 
             raw_dict = self.mock_reader.read_document(file_path)
             reader_name = f"mock_fallback_{self.mock_reader.mode}"
-        else:
-            reader_name = self.vision_reader.name
 
         record = normalize_to_record(
             raw_dict,
             source_type=source_type,
             filename=filename,
-            quality_score=getattr(self.vision_reader, "last_quality_score", 1.0),
+            quality_score=quality_score,
             reader_name=reader_name,
         )
         record = run_validation_rules(record)

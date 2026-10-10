@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 650 500" width="650" height="500">
+  <rect width="650" height="500" fill="#fffbeb" rx="8" />
+  <rect x="15" y="15" width="620" height="470" fill="none" stroke="#92400e" stroke-width="2" rx="6" />
+  
+  <!-- Header Title -->
+  <text x="325" y="45" font-family="'Comic Sans MS', cursive, sans-serif" font-size="20" font-weight="bold" fill="#92400e" text-anchor="middle">ADVERSARIAL BILL — WRITER'S SLIP</text>
+  <line x1="15" y1="60" x2="635" y2="60" stroke="#cbd5e1" stroke-width="1" />
+  
+  <!-- Invoice Details -->
+  <text x="30" y="85" font-family="Arial" font-size="11" font-weight="bold" fill="#64748b">INVOICE NO:</text>
+  <text x="120" y="85" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">INV-2026-1042</text>
+  
+  <text x="440" y="85" font-family="Arial" font-size="11" font-weight="bold" fill="#64748b">DATE:</text>
+  <text x="490" y="85" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">04/10/2026</text>
+  
+  <!-- Parties Box -->
+  <rect x="30" y="105" width="280" height="85" fill="#f8fafc" stroke="#e2e8f0" rx="4" />
+  <text x="40" y="125" font-family="Arial" font-size="10" font-weight="bold" fill="#64748b">SUPPLIER (M/s):</text>
+  <text x="40" y="145" font-family="'Comic Sans MS', cursive, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">Shree Ganesh Traders (Adversarial)</text>
+  <text x="40" y="165" font-family="Arial" font-size="10" fill="#64748b">GSTIN: <tspan font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" font-weight="bold" fill="#1e3a8a">27ABCDE1234F1Z0</tspan></text>
+  
+  <rect x="340" y="105" width="280" height="85" fill="#f8fafc" stroke="#e2e8f0" rx="4" />
+  <text x="350" y="125" font-family="Arial" font-size="10" font-weight="bold" fill="#64748b">BUYER / BILLED TO:</text>
+  <text x="350" y="145" font-family="'Comic Sans MS', cursive, sans-serif" font-size="13" font-weight="bold" fill="#0f172a">Apex Engineering Solutions</text>
+  <text x="350" y="165" font-family="Arial" font-size="10" fill="#64748b">GSTIN: <tspan font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" font-weight="bold" fill="#1e3a8a">27XYZPQ5678K1ZF</tspan></text>
+
+  <!-- Line Item Table -->
+  <rect x="30" y="210" width="590" height="26" fill="#92400e" rx="3" />
+  <text x="45" y="227" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">#</text>
+  <text x="80" y="227" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">Description</text>
+  <text x="260" y="227" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">HSN</text>
+  <text x="320" y="227" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">Qty</text>
+  <text x="370" y="227" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">Rate</text>
+  <text x="430" y="227" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">Taxable</text>
+  <text x="500" y="227" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">CGST 9%</text>
+  <text x="570" y="227" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff">SGST 9%</text>
+
+  <!-- Row 1 -->
+  <text x="45" y="260" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">1</text>
+  <text x="80" y="260" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">Hex Bolts M10</text>
+  <text x="260" y="260" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">7318</text>
+  <text x="320" y="260" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">12</text>
+  <text x="370" y="260" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">450.00</text>
+  <text x="430" y="260" font-family="'Comic Sans MS', cursive, sans-serif" font-size="13" font-weight="bold" fill="#b91c1c">5,400.00</text>
+  <text x="500" y="260" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">468.00</text>
+  <text x="570" y="260" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">468.00</text>
+  <line x1="30" y1="275" x2="620" y2="275" stroke="#e2e8f0" stroke-width="1" />
+
+  <!-- Row 2 -->
+  <text x="45" y="300" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">2</text>
+  <text x="80" y="300" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">Steel Brackets</text>
+  <text x="260" y="300" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">7326</text>
+  <text x="320" y="300" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">5</text>
+  <text x="370" y="300" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">1200.00</text>
+  <text x="430" y="300" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">6,000.00</text>
+  <text x="500" y="300" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">540.00</text>
+  <text x="570" y="300" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" fill="#0f172a">540.00</text>
+  <line x1="30" y1="315" x2="620" y2="315" stroke="#cbd5e1" stroke-width="1" />
+
+  <!-- Totals Area -->
+  <rect x="360" y="335" width="260" height="85" fill="#f1f5f9" rx="4" />
+  <text x="375" y="360" font-family="Arial" font-size="11" fill="#475569">Total Taxable Value:</text>
+  <text x="540" y="360" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">11,400.00</text>
+  
+  <text x="375" y="380" font-family="Arial" font-size="11" fill="#475569">CGST + SGST (18%):</text>
+  <text x="540" y="380" font-family="'Comic Sans MS', cursive, sans-serif" font-size="12" font-weight="bold" fill="#0f172a">2,052.00</text>
+  
+  <line x1="375" y1="390" x2="610" y2="390" stroke="#cbd5e1" stroke-width="1" />
+  <text x="375" y="410" font-family="Arial" font-size="12" font-weight="bold" fill="#92400e">GRAND TOTAL:</text>
+  <text x="530" y="410" font-family="'Comic Sans MS', cursive, sans-serif" font-size="14" font-weight="bold" fill="#92400e">₹13,425.00</text>
+  
+  <!-- Stamp / Signature -->
+  <rect x="40" y="395" width="160" height="55" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="3,2" rx="4" />
+  <text x="120" y="425" font-family="'Courier New', monospace" font-size="12" font-weight="bold" fill="#dc2626" text-anchor="middle">AUTHORIZED SIGN</text>
+</svg>
