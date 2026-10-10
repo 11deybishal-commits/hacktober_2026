@@ -2615,12 +2615,140 @@ async function loadAnomalies(){
   }
 }
 
+/* ─────────────────────── VISUAL INVOICE TEMPLATE GENERATOR ─────────────────────── */
+function buildVisualInvoiceHTML(rec){
+  var inv = rec.invoice || {};
+  var sup = inv.supplier || {};
+  var buy = inv.buyer || {};
+  var tot = inv.totals || {};
+
+  var lineItemsHtml = (inv.line_items || []).map(function(item){
+    return '<tr style="border-bottom:1px solid #EAE3D2;">' +
+      '<td style="padding:7px 10px;">' + item.item_index + '</td>' +
+      '<td style="padding:7px 10px;font-weight:600;color:#222;">' + (item.description || 'Line Item') + '</td>' +
+      '<td style="padding:7px 10px;font-family:monospace;color:#555;">' + (item.hsn_sac || '—') + '</td>' +
+      '<td style="padding:7px 10px;text-align:right;">' + (item.qty != null ? item.qty : '1') + '</td>' +
+      '<td style="padding:7px 10px;text-align:right;">' + fmt(item.rate) + '</td>' +
+      '<td style="padding:7px 10px;text-align:right;font-weight:700;">' + fmt(item.taxable_value) + '</td>' +
+      '<td style="padding:7px 10px;text-align:right;font-weight:700;color:#15803D;">' + fmt(item.line_total) + '</td>' +
+      '</tr>';
+  }).join('');
+
+  return '<div class="visual-invoice-sheet" id="visualInvoiceSheet" style="background:#FFFFFF;border:1px solid #D6CEBE;border-radius:10px;padding:26px;box-shadow:0 10px 30px rgba(0,0,0,0.07);font-family:Inter,-apple-system,sans-serif;color:#1A1A1A;max-width:620px;margin:10px auto;text-align:left;position:relative;">' +
+    '<div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:2px solid #1A1A1A;padding-bottom:12px;margin-bottom:16px;">' +
+      '<div>' +
+        '<div style="font-size:1.4rem;font-weight:900;letter-spacing:0.8px;color:#111;">TAX INVOICE</div>' +
+        '<div style="font-size:0.73rem;color:#666;margin-top:2px;font-weight:500;">Original Tax Invoice &bull; Form GST INV-01 Compliant</div>' +
+      '</div>' +
+      '<div style="text-align:right;">' +
+        '<div style="font-size:0.92rem;font-weight:800;color:#111;transition:all 0.3s;" id="tpl_field_invoice_number">Inv #: ' + (inv.invoice_number || '—') + '</div>' +
+        '<div style="font-size:0.78rem;color:#555;margin-top:2px;" id="tpl_field_invoice_date">Date: ' + (inv.invoice_date || '—') + '</div>' +
+        '<div style="font-size:0.75rem;color:#777;margin-top:1px;" id="tpl_field_place_of_supply">Place of Supply: ' + (inv.place_of_supply || (sup.state_code || '—')) + '</div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">' +
+      '<div style="background:#FAF8F3;border:1px solid #E4DCCF;border-radius:8px;padding:12px;transition:all 0.3s;" id="tpl_field_supplier_gstin">' +
+        '<div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;color:#888;letter-spacing:0.5px;">Supplier (Seller)</div>' +
+        '<div style="font-size:0.9rem;font-weight:800;color:#111;margin-top:3px;">' + (sup.name || 'Supplier') + '</div>' +
+        '<div style="font-size:0.78rem;color:#444;margin-top:3px;">GSTIN: <strong style="font-family:monospace;background:#ECE6D8;padding:2px 5px;border-radius:4px;color:#111;">' + (sup.gstin || '—') + '</strong></div>' +
+      '</div>' +
+      '<div style="background:#FAF8F3;border:1px solid #E4DCCF;border-radius:8px;padding:12px;transition:all 0.3s;" id="tpl_field_buyer_gstin">' +
+        '<div style="font-size:0.68rem;font-weight:700;text-transform:uppercase;color:#888;letter-spacing:0.5px;">Buyer (Recipient)</div>' +
+        '<div style="font-size:0.9rem;font-weight:800;color:#111;margin-top:3px;">' + (buy.name || 'Customer / Recipient') + '</div>' +
+        '<div style="font-size:0.78rem;color:#444;margin-top:3px;">GSTIN: <strong style="font-family:monospace;background:#ECE6D8;padding:2px 5px;border-radius:4px;color:#111;">' + (buy.gstin || '—') + '</strong></div>' +
+      '</div>' +
+    '</div>' +
+
+    '<div style="overflow-x:auto;margin-bottom:16px;border:1px solid #E4DCCF;border-radius:8px;">' +
+      '<table style="width:100%;border-collapse:collapse;font-size:0.78rem;">' +
+        '<thead>' +
+          '<tr style="background:#EFE6D5;border-bottom:1px solid #D8CDBA;color:#333;text-align:left;">' +
+            '<th style="padding:8px 10px;">#</th>' +
+            '<th style="padding:8px 10px;">Item Description</th>' +
+            '<th style="padding:8px 10px;">HSN</th>' +
+            '<th style="padding:8px 10px;text-align:right;">Qty</th>' +
+            '<th style="padding:8px 10px;text-align:right;">Rate</th>' +
+            '<th style="padding:8px 10px;text-align:right;">Taxable</th>' +
+            '<th style="padding:8px 10px;text-align:right;">Total</th>' +
+          '</tr>' +
+        '</thead>' +
+        '<tbody>' + (lineItemsHtml || '<tr><td colspan="7" style="padding:12px;text-align:center;color:#888;">No line items</td></tr>') + '</tbody>' +
+      '</table>' +
+    '</div>' +
+
+    '<div style="display:flex;justify-content:space-between;align-items:flex-end;border-top:2px solid #1A1A1A;padding-top:12px;">' +
+      '<div>' +
+        '<div style="font-size:0.68rem;color:#777;text-transform:uppercase;font-weight:600;">Statutory Audit Verdict</div>' +
+        '<div style="font-size:0.8rem;color:' + (rec.status === 'verified' ? '#15803D' : (rec.status === 'repaired' ? '#B45309' : '#DC2626')) + ';font-weight:800;margin-top:2px;">' +
+          (rec.status === 'verified' ? '✓ 100% Deterministic Pass' : (rec.status === 'repaired' ? '~ Reconciled via Constraints' : '! Audit Exception Flagged')) +
+        '</div>' +
+        '<div style="font-size:0.7rem;color:#888;margin-top:3px;">Source: ' + (rec.filename || 'Spreadsheet Ingestion') + '</div>' +
+      '</div>' +
+      '<div style="text-align:right;min-width:230px;">' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#444;margin-bottom:3px;padding:2px 4px;border-radius:4px;transition:all 0.3s;" id="tpl_field_totals_taxable_amount">' +
+          '<span>Total Taxable:</span>' +
+          '<strong style="color:#111;">' + fmt(tot.taxable_amount) + '</strong>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#444;margin-bottom:3px;padding:2px 4px;border-radius:4px;transition:all 0.3s;" id="tpl_field_totals_cgst_amount">' +
+          '<span>CGST:</span>' +
+          '<span>' + fmt(tot.cgst_amount) + '</span>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#444;margin-bottom:3px;padding:2px 4px;border-radius:4px;transition:all 0.3s;" id="tpl_field_totals_sgst_amount">' +
+          '<span>SGST:</span>' +
+          '<span>' + fmt(tot.sgst_amount) + '</span>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#444;margin-bottom:5px;padding:2px 4px;border-radius:4px;transition:all 0.3s;" id="tpl_field_totals_igst_amount">' +
+          '<span>IGST:</span>' +
+          '<span>' + fmt(tot.igst_amount) + '</span>' +
+        '</div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:1.05rem;font-weight:900;color:#15803D;background:#F0FDF4;padding:8px 10px;border-radius:6px;border:1.5px solid #BBF7D0;transition:all 0.3s;" id="tpl_field_totals_grand_total">' +
+          '<span>Audited Total:</span>' +
+          '<span>' + fmt(tot.grand_total) + '</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+}
+
 /* ─────────────────────── SPLIT-VIEW TAB ─────────────────────── */
 function renderSplitView(){
   var rec = state.records.find(function(r){ return r.document_id === state.selectedRecordId; });
   if(!rec) return;
-  document.getElementById('splitDocTitle').textContent = '📷 ' + (rec.filename || 'Invoice Document');
-  document.getElementById('splitDocImg').src = '/api/files/' + rec.document_id;
+  var fn = (rec.filename || '').toLowerCase();
+  var isTabular = rec.source_type === 'tabular' ||
+                  rec.reader_name === 'tabular_mapper' ||
+                  fn.indexOf('.xlsx') !== -1 ||
+                  fn.indexOf('.xls') !== -1 ||
+                  fn.indexOf('.csv') !== -1;
+  document.getElementById('splitDocTitle').textContent = (isTabular ? '📊 ' : '📷 ') + (rec.filename || 'Invoice Document');
+  var sImg = document.getElementById('splitDocImg');
+  var sWrapper = document.getElementById('splitCanvasWrapper');
+
+  function showSplitVisualTemplate() {
+    sImg.style.display = 'none';
+    var sTab = document.getElementById('splitTabularPlaceholder');
+    if (!sTab) {
+      sTab = document.createElement('div');
+      sTab.id = 'splitTabularPlaceholder';
+      sWrapper.appendChild(sTab);
+    }
+    sTab.style.display = 'block';
+    sTab.innerHTML = buildVisualInvoiceHTML(rec);
+  }
+
+  if (isTabular) {
+    showSplitVisualTemplate();
+  } else {
+    sImg.style.display = 'block';
+    sImg.onerror = function() {
+      showSplitVisualTemplate();
+    };
+    sImg.src = '/api/files/' + rec.document_id;
+    var sTab = document.getElementById('splitTabularPlaceholder');
+    if (sTab) sTab.style.display = 'none';
+  }
+
   document.getElementById('splitExportJson').href = '/api/export/' + rec.document_id + '?format=json';
   document.getElementById('splitExportCsv').href = '/api/export/' + rec.document_id + '?format=csv';
 
