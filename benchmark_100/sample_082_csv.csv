@@ -1,0 +1,11 @@
+*** BHARAT ASSOCIATES - TAX INVOICE REPORT ***
+"Doc No","Doc Date",Vendor,"Seller GST",Buyer,"Customer GST","Product Name",HSN/SAC,Nos,"Price / Item","Assessable Value","Central Tax","SGST Amt","Integrated Tax","Gross Total"
+INV-2026-082-1,17/07/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Stainless Steel Pipes & Rods",7306,9,"Rs. 2,285.51/-","Rs. 20,569.59/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 3,702.53/-","Rs. 24,272.12/-"
+INV-2026-082-1,17/07/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Network Routing Hardware Hub",8517,9,"Rs. 6,399.53/-","Rs. 57,595.77/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 10,367.24/-","Rs. 67,963.01/-"
+INV-2026-082-1,17/07/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Single Phase Energy Meter",9028,8,"Rs. 1,250.97/-","Rs. 10,007.76/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 1,801.40/-","Rs. 11,809.16/-"
+INV-2026-082-2,25/08/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Computer Peripheral Monitors",8471,5,"Rs. 5,346.83/-","Rs. 26,734.15/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 4,812.15/-","Rs. 31,546.30/-"
+INV-2026-082-2,25/08/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Packaging Corrugated Boxes",4819,10,"Rs. 176.11/-","Rs. 1,761.10/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 317.00/-","Rs. 2,078.10/-"
+INV-2026-082-2,25/08/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Computer Peripheral Monitors",8471,2,"Rs. 7,048.95/-","Rs. 14,097.90/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 2,537.62/-","Rs. 16,635.52/-"
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For BHARAT ASSOCIATES","Authorized Signatory",,,,,,,,,,,,,

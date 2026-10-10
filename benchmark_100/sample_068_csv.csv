@@ -1,0 +1,12 @@
+*** NATH TRADERS - TAX INVOICE REPORT ***
+"Invoice No",Date,"Supplier Name","Supplier GSTIN",Client,TIN/GST,Particulars,"Tariff Head","Billing Qty","Unit Price","Basic Amount","CGST Amt","State Tax","IGST (18%)","Invoice Total"
+INV-2026-068-1,08/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Single Phase Energy Meter",9028,1,"INR 1,302.80","INR 1,302.80","INR 0.00","INR 0.00","INR 234.50","INR 1,537.30"
+INV-2026-068-1,08/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Network Routing Hardware Hub",8517,8,"INR 6,274.10","INR 50,192.80","INR 0.00","INR 0.00","INR 9,034.70","INR 59,227.50"
+INV-2026-068-1,08/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Industrial Fasteners & Bolts",7318,4,"INR 724.78","INR 2,899.12","INR 0.00","INR 0.00","INR 521.84","INR 3,420.96"
+INV-2026-068-2,18/05/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Electrical Copper Wiring 1.5mm",8544,3,"INR 1,056.56","INR 3,169.68","INR 0.00","INR 0.00","INR 570.54","INR 3,740.22"
+INV-2026-068-2,18/05/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Network Routing Hardware Hub",8517,3,"INR 5,901.30","INR 17,703.90","INR 0.00","INR 0.00","INR 3,186.70","INR 20,890.60"
+INV-2026-068-2,18/05/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Stamp Paper & Legal Documentation",9982,5,"INR 3,412.24","INR 17,061.20","INR 0.00","INR 0.00","INR 3,071.02","INR 20,132.22"
+INV-2026-068-2,18/05/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Stamp Paper & Legal Documentation",9982,5,"INR 2,149.72","INR 10,748.60","INR 0.00","INR 0.00","INR 1,934.75","INR 12,683.35"
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For NATH TRADERS","Authorized Signatory",,,,,,,,,,,,,

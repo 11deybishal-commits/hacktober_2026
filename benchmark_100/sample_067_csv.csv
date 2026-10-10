@@ -1,0 +1,11 @@
+*** NATH TRADERS - TAX INVOICE REPORT ***
+GSTIN: 07AAGPN2913H1ZU | State: Delhi
+Period: 01-Oct-2026 to 31-Oct-2026 | ERP Version 9.4
+
+Printed by Operator on: 21/10/2026
+"Bill Ref","Doc Date",Seller,"Supplier GSTIN",Client,"GSTIN / UIN",Particulars,"HSN Code",Quantity,"Unit Price","Taxable Amt","Central Tax","SGST Amt","IGST Amount","Total Amount"
+INV-2026-067-1,25/04/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Stamp Paper & Legal Documentation",9982,10,"Rs. 2,020.75/-","Rs. 20,207.50/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 3,637.35/-","Rs. 23,844.85/-"
+INV-2026-067-2,25/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Computer Peripheral Monitors",8471,4,"Rs. 7,397.00/-","Rs. 29,588.00/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 5,325.84/-","Rs. 34,913.84/-"
+INV-2026-067-2,25/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Single Phase Energy Meter",9028,9,"Rs. 1,232.85/-","Rs. 11,095.65/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 1,997.22/-","Rs. 13,092.87/-"
+INV-2026-067-2,25/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Computer Peripheral Monitors",8471,9,"Rs. 5,217.71/-","Rs. 46,959.39/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 8,452.69/-","Rs. 55,412.08/-"
+INV-2026-067-2,25/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Packaging Corrugated Boxes",4819,10,"Rs. 156.56/-","Rs. 1,565.60/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 281.81/-","Rs. 1,847.41/-"

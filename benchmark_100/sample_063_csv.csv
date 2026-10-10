@@ -1,0 +1,5 @@
+*** NATH TRADERS - TAX INVOICE REPORT ***
+GSTIN: 07AAGPN2913H1ZU | State: Delhi
+Period: 01-Oct-2026 to 31-Oct-2026 | ERP Version 9.4
+"Invoice No","Doc Date","Supplier Name","Vendor GST No","Customer Name","GSTIN / UIN",Item,"HSN Code","Billing Qty",Rate,"Net Taxable","CGST Amt","State Tax","IGST (18%)","Invoice Total"
+INV-2026-063-1,19/09/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Delta Electro Components",29AABCD9876S1Z7,"Stainless Steel Pipes & Rods",7306,5,"INR 3,277.19","INR 16,385.95","INR 0.00","INR 0.00","INR 2,949.47","INR 19,335.42"

@@ -1,0 +1,4 @@
+*** KAILASH TRADERS - TAX INVOICE REPORT ***
+"Bill Ref","Invoice Date","From Company","Own GSTIN","Customer Name","Buyer GSTIN","Goods Description","Tariff Head",Pcs,"Price / Item","Basic Amount","Central Tax","SGST (9%)","IGST Amt","Gross Total"
+INV-2026-078-1,17/06/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Surat Textile Mills",24AABCS5555T1Z5,"Stamp Paper & Legal Documentation",9982,2,"INR 2,182.93","INR 4,365.86","INR 0.00","INR 0.00","INR 785.85","INR 5,151.71"
+INV-2026-078-1,17/06/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Surat Textile Mills",24AABCS5555T1Z5,"Stainless Steel Pipes & Rods",7306,8,"INR 3,407.58","INR 27,260.64","INR 0.00","INR 0.00","INR 4,906.92","INR 32,167.56"

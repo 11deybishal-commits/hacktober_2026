@@ -1,0 +1,11 @@
+*** SHREE SHYAM ENTERPRISES - TAX INVOICE REPORT ***
+"Invoice No","Doc Date","Supplier Name","Own GSTIN",Client,"Buyer GSTIN","Goods Description","HSN Code","Billing Qty",Rate,"Net Taxable","CGST Amt","State Tax","IGST Amt","Total Amount"
+INV-2026-089-1,24/08/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Chakor Room Heater Blower",8516,8,"2,612.00","20,896.00",0.00,0.00,"3,761.28","24,657.28"
+INV-2026-089-1,24/08/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Network Routing Hardware Hub",8517,9,"5,397.74","48,579.66",0.00,0.00,"8,744.34","57,324.00"
+INV-2026-089-1,24/08/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Logistics Freight Transport",9965,8,"1,004.99","8,039.92",0.00,0.00,"1,447.19","9,487.11"
+INV-2026-089-1,24/08/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Stamp Paper & Legal Documentation",9982,10,"4,213.24","42,132.40",0.00,0.00,"7,583.83","49,716.23"
+INV-2026-089-2,07/09/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Stamp Paper & Legal Documentation",9982,5,"2,203.46","11,017.30",0.00,0.00,"1,983.11","13,000.41"
+INV-2026-089-2,07/09/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Computer Peripheral Monitors",8471,7,"9,118.84","63,831.88",0.00,0.00,"11,489.74","75,321.62"
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For SHREE SHYAM ENTERPRISES","Authorized Signatory",,,,,,,,,,,,,

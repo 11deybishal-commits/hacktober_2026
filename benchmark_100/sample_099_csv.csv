@@ -1,0 +1,7 @@
+*** NATH TRADERS - TAX INVOICE REPORT ***
+GSTIN: 07AAGPN2913H1ZU | State: Delhi
+Period: 01-Oct-2026 to 31-Oct-2026 | ERP Version 9.4
+"Vch No","Doc Date",Vendor,"Vendor GST No","Customer Name","Customer GST","Product Name","Tariff Head",Quantity,"Unit Price","Taxable Value","CGST (9%)","SGST (9%)","Integrated Tax","Total Amount"
+INV-2026-099-1,15/02/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Surat Textile Mills",24AABCS5555T1Z5,"Stamp Paper & Legal Documentation",9982,5,"4,595.72","22,978.60",0.00,0.00,"4,136.15","27,114.75"
+INV-2026-099-1,15/02/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Surat Textile Mills",24AABCS5555T1Z5,"Stainless Steel Pipes & Rods",7306,3,"3,261.79","9,785.37",0.00,0.00,"1,761.37","11,546.74"
+INV-2026-099-1,15/02/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Surat Textile Mills",24AABCS5555T1Z5,"Packaging Corrugated Boxes",4819,4,296.21,"1,184.84",0.00,0.00,213.27,"1,398.11"

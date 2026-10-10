@@ -1,0 +1,8 @@
+*** BHARAT ASSOCIATES - TAX INVOICE REPORT ***
+"Inv #",Dated,Vendor,"Own GSTIN","Customer Name",TIN/GST,"Item Description","HSN Code",Nos,"Unit Price","Basic Amount","CGST (9%)","SGST Amount","IGST Amt","Gross Total"
+INV-2026-100-1,08/01/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"SOG Enterprises",33AAECN3422C1Z4,"Electrical Copper Wiring 1.5mm",8544,3,1570.78,4712.34,0.0,0.0,848.22,5560.56
+INV-2026-100-1,08/01/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"SOG Enterprises",33AAECN3422C1Z4,"Single Phase Energy Meter",9028,2,1480.14,2960.28,0.0,0.0,532.85,3493.13
+INV-2026-100-1,08/01/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"SOG Enterprises",33AAECN3422C1Z4,"Single Phase Energy Meter",9028,10,1275.33,12753.3,0.0,0.0,2295.59,15048.89
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For BHARAT ASSOCIATES","Authorized Signatory",,,,,,,,,,,,,

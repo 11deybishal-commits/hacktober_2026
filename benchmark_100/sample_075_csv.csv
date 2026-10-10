@@ -1,0 +1,8 @@
+*** SHREE SHYAM ENTERPRISES - TAX INVOICE REPORT ***
+"Bill Ref","Bill Date","Supplier Name","Seller GST","Party Name",TIN/GST,Item,"Commodity Code",Nos,"Price / Item","Assessable Value","Central Tax","State Tax","IGST (18%)","Gross Total"
+INV-2026-075-1,11/01/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Logistics Freight Transport",9965,1,2255.14,2255.14,0.0,0.0,405.93,2661.07
+INV-2026-075-1,11/01/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Network Routing Hardware Hub",8517,8,6793.09,54344.72,0.0,0.0,9782.05,64126.77
+INV-2026-075-2,22/07/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Stamp Paper & Legal Documentation",9982,6,4824.51,28947.06,0.0,0.0,5210.47,34157.53
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For SHREE SHYAM ENTERPRISES","Authorized Signatory",,,,,,,,,,,,,

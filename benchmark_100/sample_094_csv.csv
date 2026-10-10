@@ -1,0 +1,5 @@
+*** KAILASH TRADERS - TAX INVOICE REPORT ***
+"Tax Inv No",Date,Seller,"Supplier GSTIN",Client,"Buyer GSTIN",Particulars,"Tariff Head",Quantity,"Rate (INR)","Basic Amount","CGST (9%)","SGST (9%)","IGST (18%)","Line Total"
+INV-2026-094-1,18/09/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Surat Textile Mills",24AABCS5555T1Z5,"Packaging Corrugated Boxes",4819,5,283.03,"1,415.15",0.00,0.00,254.73,"1,669.88"
+,,,,,,"Industrial Fasteners & Bolts",7318,2,699.34,"1,398.68",0.00,0.00,251.76,"1,650.44"
+,,,,,,"Industrial Fasteners & Bolts",7318,4,703.74,"2,814.96",0.00,0.00,506.69,"3,321.65"

@@ -1,0 +1,5 @@
+*** NATH TRADERS - TAX INVOICE REPORT ***
+"Tax Inv No","Bill Date",Seller,"Supplier GSTIN",Client,"Party GSTIN",Item,"HSN Code",Nos,"Basic Rate","Basic Amount","CGST (9%)","SGST Amt","IGST Amt","Net Amount"
+INV-2026-073-1,08/02/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Educrafter Legal Solutions Pvt Ltd",07AAAFC3342M1ZK,"Computer Peripheral Monitors",8471,6,"INR 7,889.22","INR 47,335.32","INR 4,260.18","INR 4,260.18","INR 0.00","INR 55,855.68"
+,,,,,,"Stainless Steel Pipes & Rods",7306,3,"INR 2,656.18","INR 7,968.54","INR 717.17","INR 717.17","INR 0.00","INR 9,402.88"
+,,,,,,"Electrical Copper Wiring 1.5mm",8544,1,"INR 990.68","INR 990.68","INR 89.16","INR 89.16","INR 0.00","INR 1,169.00"

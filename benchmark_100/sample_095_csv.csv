@@ -1,0 +1,10 @@
+*** NATH TRADERS - TAX INVOICE REPORT ***
+GSTIN: 07AAGPN2913H1ZU | State: Delhi
+Period: 01-Oct-2026 to 31-Oct-2026 | ERP Version 9.4
+
+Printed by Operator on: 26/10/2026
+"Bill Ref","Invoice Date","From Company","Vendor GST No","Customer Name","Customer GST","Item Description",HSN/SAC,Nos,"Rate (INR)","Taxable Amt","CGST (9%)","SGST Amt","IGST Amount","Line Total"
+INV-2026-095-1,03/07/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Zenith Industrial Parts",27AAACZ4321Q1Z9,"Stainless Steel Pipes & Rods",7306,8,3027.97,24223.76,0.0,0.0,4360.28,28584.04
+INV-2026-095-2,20/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Zenith Industrial Parts",27AAACZ4321Q1Z9,"Logistics Freight Transport",9965,3,2469.0,7407.0,0.0,0.0,1333.26,8740.26
+INV-2026-095-2,20/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Zenith Industrial Parts",27AAACZ4321Q1Z9,"Network Routing Hardware Hub",8517,2,5509.66,11019.32,0.0,0.0,1983.48,13002.8
+INV-2026-095-2,20/06/2026,"NATH TRADERS",07AAGPN2913H1ZU,"Zenith Industrial Parts",27AAACZ4321Q1Z9,"Electrical Copper Wiring 1.5mm",8544,2,1033.86,2067.72,0.0,0.0,372.19,2439.91

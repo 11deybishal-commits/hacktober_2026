@@ -1,0 +1,9 @@
+*** SHREE SHYAM ENTERPRISES - TAX INVOICE REPORT ***
+"Invoice No","Doc Date","Billing Party","Own GSTIN","Party Name","Buyer GSTIN",Item,HSN/SAC,Pcs,"Basic Rate","Basic Amount","CGST (9%)","SGST Amt","Integrated Tax","Total Amount"
+INV-2026-093-1,13/02/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Packaging Corrugated Boxes",4819,8,"INR 231.90","INR 1,855.20","INR 0.00","INR 0.00","INR 333.94","INR 2,189.14"
+INV-2026-093-1,13/02/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Stainless Steel Pipes & Rods",7306,8,"INR 3,729.77","INR 29,838.16","INR 0.00","INR 0.00","INR 5,370.87","INR 35,209.03"
+INV-2026-093-1,13/02/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Single Phase Energy Meter",9028,1,"INR 1,422.33","INR 1,422.33","INR 0.00","INR 0.00","INR 256.02","INR 1,678.35"
+INV-2026-093-1,13/02/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Logistics Freight Transport",9965,3,"INR 2,796.15","INR 8,388.45","INR 0.00","INR 0.00","INR 1,509.92","INR 9,898.37"
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For SHREE SHYAM ENTERPRISES","Authorized Signatory",,,,,,,,,,,,,

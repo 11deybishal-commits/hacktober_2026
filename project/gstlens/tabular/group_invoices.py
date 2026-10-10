@@ -22,26 +22,41 @@ def parse_tabular_to_invoices(df: pd.DataFrame, source_filename: str = "") -> Li
     """
     Groups tabular data rows by invoice_number and maps into CanonicalInvoice models.
     """
-    # 1. Map columns
+    # 1. Map columns uniquely (avoid duplicate renamed columns)
     column_mapping = {}
+    used_canonical_keys = set()
     for col in df.columns:
         samples = df[col].dropna().head(5).tolist()
         canonical_key = map_column_name(col, samples)
-        if canonical_key:
+        if canonical_key and canonical_key not in used_canonical_keys:
             column_mapping[col] = canonical_key
+            used_canonical_keys.add(canonical_key)
 
     # Rename mapped columns
     renamed_df = df.rename(columns=column_mapping)
 
+    # 1.5. Filter summary and total rows that are not line items
+    summary_words = ["total", "grand total", "subtotal", "sub total", "totals", "summary", "amount in words", "signatory", "e.&o.e", "e&oe"]
+    for check_col in ["description", "invoice_number", "hsn_sac"]:
+        if check_col in renamed_df.columns:
+            renamed_df = renamed_df[~renamed_df[check_col].astype(str).str.strip().str.lower().isin(summary_words)]
+
+    # Forward-fill sparse header metadata across multi-item invoice rows
+    for meta_col in ["invoice_number", "invoice_date", "buyer_name", "buyer_gstin", "supplier_name", "supplier_gstin", "place_of_supply"]:
+        if meta_col in renamed_df.columns:
+            renamed_df[meta_col] = renamed_df[meta_col].ffill()
+
     # 2. Group by invoice_number (or single group if no invoice_number column)
     invoices: List[CanonicalInvoice] = []
     
-    if "invoice_number" in renamed_df.columns and renamed_df["invoice_number"].nunique() > 1:
-        groups = renamed_df.groupby("invoice_number")
+    if "invoice_number" in renamed_df.columns and renamed_df["invoice_number"].dropna().nunique() > 1:
+        groups = renamed_df.groupby("invoice_number", sort=False)
     else:
         groups = [("default_inv", renamed_df)]
 
     for group_key, group_df in groups:
+        if group_df.empty:
+            continue
         first_row = group_df.iloc[0]
         
         # Build Supplier & Buyer

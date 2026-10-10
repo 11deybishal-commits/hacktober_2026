@@ -1,0 +1,9 @@
+*** METRO STEEL & HARDWARE - TAX INVOICE REPORT ***
+"Vch No","Bill Date","From Company","Supplier GSTIN",Buyer,"GSTIN / UIN",Item,"HSN Code","Billing Qty",Rate,"Assessable Value","CGST Amount","SGST Amt","IGST Amt","Gross Total"
+INV-2026-065-1,25/03/2026,"METRO STEEL & HARDWARE",24AABCM5678P1ZQ,"Educrafter Legal Solutions Pvt Ltd",07AAAFC3342M1ZK,"Computer Peripheral Monitors",8471,1,5042.32,5042.32,0.0,0.0,907.62,5949.94
+INV-2026-065-1,25/03/2026,"METRO STEEL & HARDWARE",24AABCM5678P1ZQ,"Educrafter Legal Solutions Pvt Ltd",07AAAFC3342M1ZK,"Stainless Steel Pipes & Rods",7306,6,3942.57,23655.42,0.0,0.0,4257.98,27913.4
+INV-2026-065-1,25/03/2026,"METRO STEEL & HARDWARE",24AABCM5678P1ZQ,"Educrafter Legal Solutions Pvt Ltd",07AAAFC3342M1ZK,"Packaging Corrugated Boxes",4819,3,346.31,1038.93,0.0,0.0,187.01,1225.94
+INV-2026-065-1,25/03/2026,"METRO STEEL & HARDWARE",24AABCM5678P1ZQ,"Educrafter Legal Solutions Pvt Ltd",07AAAFC3342M1ZK,"Packaging Corrugated Boxes",4819,6,315.54,1893.24,0.0,0.0,340.78,2234.02
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For METRO STEEL & HARDWARE","Authorized Signatory",,,,,,,,,,,,,

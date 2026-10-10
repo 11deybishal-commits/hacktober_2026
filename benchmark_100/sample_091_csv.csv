@@ -1,0 +1,5 @@
+"Tax Inv No","Doc Date","Supplier Name","Seller GST",Client,"Buyer GSTIN","Goods Description","HSN Code",Pcs,"Rate (INR)","Taxable Value","CGST Amount","SGST Amount","IGST Amt","Total Amount"
+INV-2026-091-1,27/01/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Rishabh & Co.",07AABCR1234L1Z8,"Electrical Copper Wiring 1.5mm",8544,4,"₹ 1,507.87","₹ 6,031.48","₹ 542.83","₹ 542.83","₹ 0.00","₹ 7,117.14"
+INV-2026-091-1,27/01/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Rishabh & Co.",07AABCR1234L1Z8,"Stamp Paper & Legal Documentation",9982,5,"₹ 4,613.15","₹ 23,065.75","₹ 2,075.92","₹ 2,075.92","₹ 0.00","₹ 27,217.59"
+INV-2026-091-1,27/01/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Rishabh & Co.",07AABCR1234L1Z8,"Industrial Fasteners & Bolts",7318,3,"₹ 564.88","₹ 1,694.64","₹ 152.52","₹ 152.52","₹ 0.00","₹ 1,999.68"
+INV-2026-091-1,27/01/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Rishabh & Co.",07AABCR1234L1Z8,"Stamp Paper & Legal Documentation",9982,10,"₹ 3,868.01","₹ 38,680.10","₹ 3,481.21","₹ 3,481.21","₹ 0.00","₹ 45,642.52"

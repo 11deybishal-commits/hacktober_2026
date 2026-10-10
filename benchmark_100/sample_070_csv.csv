@@ -1,0 +1,6 @@
+*** KAILASH TRADERS - TAX INVOICE REPORT ***
+GSTIN: 07ABOPK0909P1Z6 | State: Delhi
+Period: 01-Oct-2026 to 31-Oct-2026 | ERP Version 9.4
+
+"Inv #",Dated,"Supplier Name","Seller GST","Customer Name","GSTIN / UIN",Particulars,HSN/SAC,Pcs,"Price / Item","Assessable Value","CGST (9%)","SGST (9%)","Integrated Tax","Line Total"
+INV-2026-070-1,13/03/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"SOG Enterprises",33AAECN3422C1Z4,"Single Phase Energy Meter",9028,4,1242.54,4970.16,0.0,0.0,894.63,5864.79

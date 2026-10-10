@@ -1,0 +1,7 @@
+*** KAILASH TRADERS - TAX INVOICE REPORT ***
+"Invoice No",Dated,"Supplier Name","Vendor GST No",Buyer,"Buyer GSTIN",Item,HSN/SAC,Nos,"Price / Item","Assessable Value","CGST (9%)","State Tax","IGST (18%)","Invoice Total"
+INV-2026-061-1,12/04/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"SOG Enterprises",33AAECN3422C1Z4,"Network Routing Hardware Hub",8517,8,"₹ 4,981.08","₹ 39,848.64","₹ 0.00","₹ 0.00","₹ 7,172.76","₹ 47,021.40"
+INV-2026-061-2,09/07/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"SOG Enterprises",33AAECN3422C1Z4,"Chakor Room Heater Blower",8516,2,"₹ 2,954.45","₹ 5,908.90","₹ 0.00","₹ 0.00","₹ 1,063.60","₹ 6,972.50"
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For KAILASH TRADERS","Authorized Signatory",,,,,,,,,,,,,

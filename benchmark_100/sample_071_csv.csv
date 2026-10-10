@@ -1,0 +1,7 @@
+*** METRO STEEL & HARDWARE - TAX INVOICE REPORT ***
+GSTIN: 24AABCM5678P1ZQ | State: Gujarat
+Period: 01-Oct-2026 to 31-Oct-2026 | ERP Version 9.4
+
+Printed by Operator on: 24/10/2026
+"Doc No","Bill Date","From Company","Supplier GSTIN",Buyer,"Party GSTIN","Product Name","Tariff Head",Nos,"Unit Price","Assessable Value","CGST Amount","SGST Amount","Integrated Tax","Invoice Total"
+INV-2026-071-1,25/05/2026,"METRO STEEL & HARDWARE",24AABCM5678P1ZQ,"Zenith Industrial Parts",27AAACZ4321Q1Z9,"Industrial Fasteners & Bolts",7318,8,"₹ 694.87","₹ 5,558.96","₹ 0.00","₹ 0.00","₹ 1,000.61","₹ 6,559.57"

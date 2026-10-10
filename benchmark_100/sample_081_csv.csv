@@ -1,0 +1,8 @@
+*** BHARAT ASSOCIATES - TAX INVOICE REPORT ***
+GSTIN: 09GBVPS8212J1ZP | State: Uttar Pradesh
+Period: 01-Oct-2026 to 31-Oct-2026 | ERP Version 9.4
+"Inv #",Date,Vendor,"Vendor GST No",Client,"Buyer GSTIN","Goods Description",HSN/SAC,Qty,"Price / Item","Net Taxable","CGST Amount","SGST (9%)","IGST (18%)","Invoice Total"
+INV-2026-081-1,13/05/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Stainless Steel Pipes & Rods",7306,10," 1,907.55"," 19,075.50"," 0.00"," 0.00"," 3,433.59"," 22,509.09"
+INV-2026-081-2,03/03/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Chakor Room Heater Blower",8516,2," 2,597.57"," 5,195.14"," 0.00"," 0.00"," 935.13"," 6,130.27"
+INV-2026-081-2,03/03/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Logistics Freight Transport",9965,5," 2,149.16"," 10,745.80"," 0.00"," 0.00"," 1,934.24"," 12,680.04"
+INV-2026-081-2,03/03/2026,"BHARAT ASSOCIATES",09GBVPS8212J1ZP,"Surat Textile Mills",24AABCS5555T1Z5,"Single Phase Energy Meter",9028,3," 1,270.35"," 3,811.05"," 0.00"," 0.00"," 685.99"," 4,497.04"

@@ -1,0 +1,9 @@
+*** SHREE SHYAM ENTERPRISES - TAX INVOICE REPORT ***
+"Tax Inv No","Bill Date","Billing Party","Own GSTIN",Client,"Party GSTIN",Particulars,"Commodity Code",Nos,"Rate (INR)","Basic Amount","CGST (9%)","SGST Amt","Integrated Tax","Invoice Total"
+INV-2026-079-1,09/06/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Zenith Industrial Parts",27AAACZ4321Q1Z9,"Packaging Corrugated Boxes",4819,7,234.18,"1,639.26",147.53,147.53,0.00,"1,934.32"
+INV-2026-079-1,09/06/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Zenith Industrial Parts",27AAACZ4321Q1Z9,"Chakor Room Heater Blower",8516,3,"3,144.69","9,434.07",849.07,849.07,0.00,"11,132.21"
+INV-2026-079-1,09/06/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Zenith Industrial Parts",27AAACZ4321Q1Z9,"Single Phase Energy Meter",9028,4,"1,491.14","5,964.56",536.81,536.81,0.00,"7,038.18"
+INV-2026-079-1,09/06/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Zenith Industrial Parts",27AAACZ4321Q1Z9,"Electrical Copper Wiring 1.5mm",8544,5,"1,580.64","7,903.20",711.29,711.29,0.00,"9,325.78"
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For SHREE SHYAM ENTERPRISES","Authorized Signatory",,,,,,,,,,,,,

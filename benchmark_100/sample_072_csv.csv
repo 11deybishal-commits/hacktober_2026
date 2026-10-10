@@ -1,0 +1,8 @@
+*** SEENU TRANSPORTS PVT LTD - TAX INVOICE REPORT ***
+"Tax Inv No","Bill Date",Seller,"Seller GST",Buyer,"Buyer GSTIN","Item Description","Commodity Code",Quantity,"Rate (INR)","Assessable Value","CGST Amt","State Tax","IGST Amt","Net Amount"
+INV-2026-072-1,26/01/2026,"SEENU TRANSPORTS PVT LTD",33ACUPCE9T2D1ZH,"Delta Electro Components",29AABCD9876S1Z7,"Computer Peripheral Monitors",8471,4,"Rs. 5,552.45/-","Rs. 22,209.80/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 3,997.76/-","Rs. 26,207.56/-"
+INV-2026-072-1,26/01/2026,"SEENU TRANSPORTS PVT LTD",33ACUPCE9T2D1ZH,"Delta Electro Components",29AABCD9876S1Z7,"Packaging Corrugated Boxes",4819,10,"Rs. 325.37/-","Rs. 3,253.70/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 585.67/-","Rs. 3,839.37/-"
+INV-2026-072-1,26/01/2026,"SEENU TRANSPORTS PVT LTD",33ACUPCE9T2D1ZH,"Delta Electro Components",29AABCD9876S1Z7,"Computer Peripheral Monitors",8471,10,"Rs. 7,844.00/-","Rs. 78,440.00/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 14,119.20/-","Rs. 92,559.20/-"
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For SEENU TRANSPORTS PVT LTD","Authorized Signatory",,,,,,,,,,,,,

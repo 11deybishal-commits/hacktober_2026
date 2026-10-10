@@ -1,0 +1,9 @@
+*** KAILASH TRADERS - TAX INVOICE REPORT ***
+"Bill Ref",Dated,Seller,"Own GSTIN",Buyer,"Party GSTIN",Particulars,HSN/SAC,Quantity,"Price / Item","Net Taxable","CGST Amount","SGST Amt","Integrated Tax","Invoice Total"
+INV-2026-086-1,10/09/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Prime Retail Distribution",06AAACP1111N1Z3,"Computer Peripheral Monitors",8471,9,"₹ 8,449.70","₹ 76,047.30","₹ 0.00","₹ 0.00","₹ 13,688.51","₹ 89,735.81"
+INV-2026-086-1,10/09/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Prime Retail Distribution",06AAACP1111N1Z3,"Packaging Corrugated Boxes",4819,7,"₹ 343.41","₹ 2,403.87","₹ 0.00","₹ 0.00","₹ 432.70","₹ 2,836.57"
+INV-2026-086-1,10/09/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Prime Retail Distribution",06AAACP1111N1Z3,"Electrical Copper Wiring 1.5mm",8544,8,"₹ 1,071.30","₹ 8,570.40","₹ 0.00","₹ 0.00","₹ 1,542.67","₹ 10,113.07"
+INV-2026-086-1,10/09/2026,"KAILASH TRADERS",07ABOPK0909P1Z6,"Prime Retail Distribution",06AAACP1111N1Z3,"Chakor Room Heater Blower",8516,1,"₹ 2,634.67","₹ 2,634.67","₹ 0.00","₹ 0.00","₹ 474.24","₹ 3,108.91"
+"Sub Total",,,,,,,,,,"Sum Taxable","Sum CGST","Sum SGST","Sum IGST","Grand Total"
+"E. & O. E.","Goods once sold cannot be taken back",,,,,,,,,,,,,
+"For KAILASH TRADERS","Authorized Signatory",,,,,,,,,,,,,

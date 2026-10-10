@@ -1,0 +1,6 @@
+*** SHREE SHYAM ENTERPRISES - TAX INVOICE REPORT ***
+"Doc No",Dated,"From Company","Vendor GST No",Buyer,"Party GSTIN","Goods Description",HSN/SAC,Qty,"Rate (INR)","Net Taxable","CGST Amount","SGST Amt","IGST (18%)","Total Amount"
+INV-2026-087-1,05/09/2026,"SHREE SHYAM ENTERPRISES",27AASCS9921M1Z3,"Surat Textile Mills",24AABCS5555T1Z5,"Industrial Fasteners & Bolts",7318,1,"Rs. 490.29/-","Rs. 490.29/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 88.25/-","Rs. 578.54/-"
+,,,,,,"Single Phase Energy Meter",9028,4,"Rs. 1,236.22/-","Rs. 4,944.88/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 890.08/-","Rs. 5,834.96/-"
+,,,,,,"Packaging Corrugated Boxes",4819,7,"Rs. 273.11/-","Rs. 1,911.77/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 344.12/-","Rs. 2,255.89/-"
+,,,,,,"Electrical Copper Wiring 1.5mm",8544,1,"Rs. 1,352.66/-","Rs. 1,352.66/-","Rs. 0.00/-","Rs. 0.00/-","Rs. 243.48/-","Rs. 1,596.14/-"
