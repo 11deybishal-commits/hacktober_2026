@@ -143,7 +143,18 @@ if st.session_state.selected_record_id:
     
     with col1:
         st.markdown("#### Source Document")
-        st.info("Image viewer with bounding boxes would render here. (For Hackathon demo, image overlay implemented via OpenCV/Pillow)")
+        cand_paths = [
+            os.path.join("temp_uploads", record.filename),
+            os.path.join("project", "temp_uploads", record.filename),
+        ]
+        img_shown = False
+        for p in cand_paths:
+            if os.path.exists(p) and any(p.lower().endswith(ext) for ext in [".jpg", ".jpeg", ".png", ".webp"]):
+                st.image(p, caption=record.filename, use_container_width=True)
+                img_shown = True
+                break
+        if not img_shown:
+            st.info(f"File: {record.filename} ({record.source_type})")
         
         if record.repair_log:
             st.markdown("#### 🛠️ Repair Trail")
