@@ -2,9 +2,13 @@
 .env
 .env.*
 *.env
+**/.env
+**/backend/.env
 backend/.env
+project/.env
+project/backend/.env
 !.env.example
-!backend/.env.example
+!**/.env.example
 
 # Node / JS dependencies and build outputs
 node_modules/

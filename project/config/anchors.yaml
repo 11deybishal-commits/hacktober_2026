@@ -1,0 +1,62 @@
+# Layout anchors and synonyms for field detection
+anchors:
+  invoice_number:
+    - "Invoice No"
+    - "Inv No"
+    - "Invoice #"
+    - "Bill No"
+    - "Cash Memo No"
+    - "Tax Invoice No"
+    - "Tax Inv No"
+
+  invoice_date:
+    - "Invoice Date"
+    - "Inv Date"
+    - "Date"
+    - "Dated"
+    - "Bill Date"
+    - "Date of Issue"
+
+  gstin:
+    - "GSTIN"
+    - "GST No"
+    - "GST Number"
+    - "GSTIN / UIN"
+    - "Party GST"
+    - "Supplier GSTIN"
+    - "Buyer GSTIN"
+
+  supplier:
+    - "Supplier"
+    - "Seller"
+    - "Vendor"
+    - "M/s"
+    - "From"
+    - "Billed By"
+
+  buyer:
+    - "Buyer"
+    - "Customer"
+    - "Client"
+    - "Billed To"
+    - "Consignee"
+    - "Sold To"
+
+  line_items:
+    description: ["Description", "Item", "Particulars", "Product", "Goods", "Description of Goods"]
+    hsn_sac: ["HSN", "SAC", "HSN/SAC", "HSN Code", "Tariff"]
+    qty: ["Qty", "Quantity", "Nos", "Units", "Pcs"]
+    rate: ["Rate", "Price", "Unit Price", "Rate/Unit"]
+    discount: ["Disc", "Discount", "Less Disc"]
+    taxable_value: ["Taxable", "Taxable Value", "Taxable Amt", "Amount", "Value"]
+    cgst: ["CGST", "CGST Amt", "Central Tax"]
+    sgst: ["SGST", "SGST Amt", "State Tax", "UTGST"]
+    igst: ["IGST", "IGST Amt", "Integrated Tax"]
+    total: ["Total", "Total Amt", "Line Total", "Item Total"]
+
+  totals:
+    subtotal: ["Sub Total", "Taxable Value", "Total Taxable", "Gross Amount"]
+    total_tax: ["Total Tax", "Tax Amount", "GST Total"]
+    round_off: ["Round Off", "Rounding", "R/Off", "(+/-) Round Off"]
+    grand_total: ["Grand Total", "Total Amount", "Net Payable", "Total Invoice Value", "Net Total"]
+    amount_in_words: ["Amount in Words", "Rupees in Words", "Total in Words"]

@@ -1,0 +1,42 @@
+# Indian GST State and Union Territory Codes
+# Maps 2-digit state code prefix to state name and tax structure
+states:
+  "01": { name: "Jammu and Kashmir", type: "UT_WITH_LEGISLATURE" }
+  "02": { name: "Himachal Pradesh", type: "STATE" }
+  "03": { name: "Punjab", type: "STATE" }
+  "04": { name: "Chandigarh", type: "UT" }
+  "05": { name: "Uttarakhand", type: "STATE" }
+  "06": { name: "Haryana", type: "STATE" }
+  "07": { name: "Delhi", type: "UT_WITH_LEGISLATURE" }
+  "08": { name: "Rajasthan", type: "STATE" }
+  "09": { name: "Uttar Pradesh", type: "STATE" }
+  "10": { name: "Bihar", type: "STATE" }
+  "11": { name: "Sikkim", type: "STATE" }
+  "12": { name: "Arunachal Pradesh", type: "STATE" }
+  "13": { name: "Nagaland", type: "STATE" }
+  "14": { name: "Manipur", type: "STATE" }
+  "15": { name: "Mizoram", type: "STATE" }
+  "16": { name: "Tripura", type: "STATE" }
+  "17": { name: "Meghalaya", type: "STATE" }
+  "18": { name: "Assam", type: "STATE" }
+  "19": { name: "West Bengal", type: "STATE" }
+  "20": { name: "Jharkhand", type: "STATE" }
+  "21": { name: "Odisha", type: "STATE" }
+  "22": { name: "Chhattisgarh", type: "STATE" }
+  "23": { name: "Madhya Pradesh", type: "STATE" }
+  "24": { name: "Gujarat", type: "STATE" }
+  "25": { name: "Daman and Diu", type: "UT" }
+  "26": { name: "Dadra and Nagar Haveli and Daman and Diu", type: "UT" }
+  "27": { name: "Maharashtra", type: "STATE" }
+  "28": { name: "Andhra Pradesh (Old)", type: "STATE" }
+  "29": { name: "Karnataka", type: "STATE" }
+  "30": { name: "Goa", type: "STATE" }
+  "31": { name: "Lakshadweep", type: "UT" }
+  "32": { name: "Kerala", type: "STATE" }
+  "33": { name: "Tamil Nadu", type: "STATE" }
+  "34": { name: "Puducherry", type: "UT_WITH_LEGISLATURE" }
+  "35": { name: "Andaman and Nicobar Islands", type: "UT" }
+  "36": { name: "Telangana", type: "STATE" }
+  "37": { name: "Andhra Pradesh", type: "STATE" }
+  "38": { name: "Ladakh", type: "UT" }
+  "97": { name: "Other Territory", type: "OTHER" }

@@ -1,0 +1,28 @@
+# Validation tolerances and constants
+tolerances:
+  tax_math_inr: 1.00          # Taxable * Rate ≈ Tax (±₹1) to accommodate line-level rounding
+  line_sum_inr: 1.00          # Sum of line items ≈ Subtotal (±₹1)
+  grand_total_inr: 1.00       # Subtotal + Taxes + RoundOff ≈ Grand Total (±₹1)
+  round_off_max_inr: 2.50     # Permissible round-off adjustment magnitude
+
+gstin:
+  length: 15
+  alphabet: "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+  # Common OCR / handwriting character confusions for guided repair
+  confusions:
+    "0": ["O", "Q", "D", "8"]
+    "O": ["0", "Q", "D"]
+    "1": ["I", "l", "7", "T"]
+    "I": ["1", "l", "7"]
+    "2": ["Z"]
+    "Z": ["2"]
+    "5": ["S", "6"]
+    "S": ["5", "8"]
+    "8": ["B", "0", "S"]
+    "B": ["8"]
+
+confidence:
+  thresholds:
+    verified: 0.85
+    repaired: 0.70
+    needs_review: 0.70

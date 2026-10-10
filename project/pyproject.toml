@@ -1,0 +1,13 @@
+[project]
+name = "gstlens"
+version = "1.0.0"
+description = "GSTLens: End-to-End AI-Powered GST Invoice Intelligence System"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "Team VYOM+", email = "team@vyomplus.example"}
+]
+license = {text = "Apache-2.0"}
+
+[tool.setuptools]
+packages = ["gstlens", "backend"]
