@@ -1,0 +1,24 @@
+VYOM+ — End-to-End AI-Powered GST Invoice Intelligence System
+Build an end-to-end invoice intelligence system for VYOM+ that can accept different invoice and transaction document formats, process them using an appropriate AI pipeline, and convert them into accurate, validated, machine-readable financial records.
+Input formats
+•	Excel (.xlsx)
+•	CSV
+•	PDF
+•	JPEG / JPG
+•	PNG
+What the system should do
+•	Identify the type of input and route it through an appropriate processing pipeline.
+•	For Excel/CSV, organize the available information into a clean and structured tabular format.
+•	For PDFs and images, extract the relevant invoice and GST information and convert it into structured records.
+•	Extract important invoice, GST, tax, financial, and line-item information.
+•	Validate extracted information and identify or handle inconsistent or uncertain data where possible.
+•	Return standardized machine-readable output such as JSON and/or structured tabular data.
+•	Provide a simple interface where an evaluator can upload documents and inspect the resulting structured information.
+Main technical focus
+The challenge should primarily address reliable document intelligence, with particular attention to improving handwritten GST invoice processing while maintaining strong performance on printed and digitally generated invoices.
+AI and technology
+•	Teams may use open-source or appropriately licensed OCR systems, vision-language models, document-understanding models, LLMs, and related AI components.
+•	The solution should be designed as a complete processing pipeline rather than only a text-recognition demo.
+•	The system should be capable of turning real-world invoice documents into accurate and usable financial records.
+Expected final outcome
+A working document-intelligence system that accepts supported invoice formats and produces validated, structured financial data suitable for downstream accounting workflows.
