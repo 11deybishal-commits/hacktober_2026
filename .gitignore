@@ -40,3 +40,8 @@ venv.bak/
 *.swo
 .DS_Store
 Thumbs.db
+
+# Temp uploads and test artifacts
+temp_uploads/
+project/temp_uploads/
+*.png

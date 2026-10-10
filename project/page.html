@@ -52,232 +52,796 @@
     html, body { height: 100%; overflow-x: hidden; background: var(--ivory); color: var(--charcoal); }
 
     /* ─────────────────────── LANDING PAGE ─────────────────────── */
+    /* ─────────────────────── EXACT LANDING PAGE AS PER REFERENCE ─────────────────────── */
     #landing {
-      min-height: 100vh;
-      background: linear-gradient(160deg, #F5EFE6 0%, #EFE6D8 30%, #E8DCC8 60%, #EDE4D4 100%);
-      position: relative; overflow: hidden;
+      height: 100vh;
+      max-height: 100vh;
+      overflow: hidden;
+      box-sizing: border-box;
+      background: radial-gradient(circle at 75% 45%, #F7EFE3 0%, #F5ECE0 35%, #EFE5D6 70%, rgba(233, 223, 207, 0.6) 100%),
+                  linear-gradient(135deg, #FAF6F0 0%, #F3ECE1 50%, #ECE1D1 100%);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
-    #landingCoinCanvas {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; z-index: 2;
-    }
-    /* Large warm radial glow behind right side visualization */
-    #landing::before {
-      content:''; position: absolute; top: 50%; right: 8%; width: 680px; height: 680px;
+
+    /* Ambient Warm Studio Lighting */
+    .landing-ambient-glow {
+      position: absolute;
+      top: 48%;
+      right: 12%;
+      width: 720px;
+      height: 720px;
       transform: translateY(-50%);
-      border-radius: 50%; background: radial-gradient(circle, rgba(235,200,145,.35) 0%, rgba(240,220,170,.15) 45%, transparent 70%);
-      pointer-events: none; z-index: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(245, 218, 168, 0.45) 0%, rgba(240, 210, 160, 0.20) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: 1;
+      animation: ambientBreathe 7s ease-in-out infinite alternate;
     }
-    /* Bottom left soft blur */
-    #landing::after {
-      content:''; position: absolute; bottom: -60px; left: -60px; width: 420px; height: 420px;
-      border-radius: 50%; background: radial-gradient(circle, rgba(200,148,58,.08) 0%, transparent 70%);
-      pointer-events: none; z-index: 1;
+    @keyframes ambientBreathe {
+      0% { transform: translateY(-50%) scale(0.96); opacity: 0.85; }
+      100% { transform: translateY(-50%) scale(1.06); opacity: 1; }
     }
 
-    /* ── NAV ── */
+    /* ── NAV BAR ── */
     .nav {
-      position: relative; z-index: 10; display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 52px;
+      position: relative;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 56px 6px;
     }
-    .nav-logo { display: flex; align-items: center; gap: 11px; }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
     .nav-logo-icon {
-      width: 42px; height: 42px; border-radius: 50%;
-      background: linear-gradient(135deg, #1A2332 60%, #2D4060 100%);
-      border: 2px solid rgba(200,148,58,.4);
-      display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 2px 12px rgba(26,35,50,.25);
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
     }
-    .nav-logo-icon svg { width: 20px; height: 20px; fill: none; stroke: #C8943A; stroke-width: 2.2; }
-    .nav-brand-name { font-size: 1.2rem; font-weight: 800; color: var(--charcoal); letter-spacing: -0.02em; }
-    .nav-brand-sub { font-size: 0.65rem; color: var(--slate); font-weight: 500; letter-spacing: 0.02em; margin-top: 1px; }
+    .nav-logo-icon svg {
+      width: 100%;
+      height: 100%;
+      transition: transform 0.4s ease;
+    }
+    .nav-logo:hover .nav-logo-icon svg {
+      transform: rotate(20deg) scale(1.05);
+    }
+    .nav-brand-name {
+      font-size: 1.35rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .brand-dark { color: #0F172A; }
+    .brand-blue { color: #2563EB; }
+    .nav-brand-sub {
+      font-size: 0.68rem;
+      color: #64748B;
+      font-weight: 500;
+      letter-spacing: 0.01em;
+      margin-top: 2px;
+    }
 
-    .nav-links { display: flex; gap: 36px; align-items: center; }
-    .nav-links a { font-size: 0.875rem; font-weight: 500; color: var(--slate); text-decoration: none; transition: color 0.18s; cursor: pointer; }
-    .nav-links a:hover { color: var(--charcoal); }
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      align-items: center;
+    }
+    .nav-links a {
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: #64748B;
+      text-decoration: none;
+      transition: color 0.2s ease, transform 0.2s ease;
+      cursor: pointer;
+    }
+    .nav-links a:hover {
+      color: #0F172A;
+      transform: translateY(-1px);
+    }
 
-    .nav-right { display: flex; align-items: center; gap: 18px; }
-    .nav-status { display: inline-flex; align-items: center; gap: 7px; font-size: 0.82rem; font-weight: 600; color: var(--charcoal); }
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+    .nav-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #1E293B;
+    }
+    .nav-status-ping-wrap {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
     .nav-status-dot {
-      width: 8px; height: 8px; border-radius: 50%; background: #22C55E;
-      box-shadow: 0 0 0 3px rgba(34,197,94,.2); animation: pgreen 2.2s ease-in-out infinite;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22C55E;
+      position: relative;
+      z-index: 2;
     }
-    @keyframes pgreen { 0%,100% { box-shadow: 0 0 0 3px rgba(34,197,94,.2); } 50% { box-shadow: 0 0 0 7px rgba(34,197,94,.05); } }
+    .nav-status-ping {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: #22C55E;
+      opacity: 0.75;
+      animation: radarPing 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+    }
+    @keyframes radarPing {
+      0% { transform: scale(1); opacity: 0.8; }
+      75%, 100% { transform: scale(2.8); opacity: 0; }
+    }
 
     .btn-launch {
-      background: var(--charcoal); color: #fff; border: none; border-radius: 10px;
-      padding: 10px 22px; font-weight: 700; font-size: 0.86rem; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 8px; transition: all 0.2s;
-      letter-spacing: 0.01em;
+      background: #0F172A;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 9999px;
+      padding: 10px 22px;
+      font-weight: 600;
+      font-size: 0.86rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 2px 8px rgba(15, 23, 42, 0.15);
     }
-    .btn-launch:hover { background: #253040; transform: translateY(-1px); box-shadow: 0 5px 18px rgba(26,35,50,.28); }
+    .btn-launch:hover {
+      background: #1E293B;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+    }
+    .btn-launch:hover span.arrow {
+      transform: translateX(3px);
+    }
+    .btn-launch span.arrow {
+      transition: transform 0.2s ease;
+      display: inline-block;
+    }
 
     /* ── HERO ── */
     .hero {
-      position: relative; z-index: 5; display: grid; grid-template-columns: 1fr 1.15fr; align-items: center;
-      padding: 52px 52px 28px 52px; min-height: calc(100vh - 80px - 84px); gap: 24px;
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr 1.25fr;
+      align-items: center;
+      padding: 6px 56px;
+      gap: 32px;
+      flex: 1;
+    }
+
+    .hero-left {
+      max-width: 520px;
+      z-index: 5;
     }
     .hero-eyebrow {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.22em; color: var(--slate); text-transform: uppercase;
-      margin-bottom: 22px; display: flex; align-items: center; gap: 10px;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      color: #64748B;
+      text-transform: uppercase;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
-    .hero-eyebrow-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--slate); }
+    .hero-eyebrow-dot {
+      color: #94A3B8;
+      font-size: 0.8rem;
+    }
 
-    .hero-h1 { font-size: 4rem; font-weight: 900; line-height: 1.08; letter-spacing: -0.045em; color: var(--charcoal); margin-bottom: 0; }
-    .hero-h1-gold { color: #B8743A; display: block; font-weight: 900; }
+    .hero-h1 {
+      font-size: 3.75rem;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      color: #0F172A;
+      margin-bottom: 0;
+    }
+    .hero-h1-gold {
+      display: block;
+      font-weight: 900;
+      background: linear-gradient(135deg, #B45309 0%, #D97706 25%, #E68A36 50%, #C26E36 75%, #9A3412 100%);
+      background-size: 200% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: goldSheen 6s ease-in-out infinite alternate;
+    }
+    @keyframes goldSheen {
+      0% { background-position: 0% center; }
+      100% { background-position: 100% center; }
+    }
+
     .hero-desc {
-      font-size: 0.97rem; line-height: 1.72; color: #6E7A8A; max-width: 440px; margin: 22px 0 36px;
+      font-size: 0.98rem;
+      line-height: 1.62;
+      color: #64748B;
+      max-width: 460px;
+      margin: 16px 0 28px;
     }
-    .hero-ctas { display: flex; gap: 14px; align-items: center; }
 
-    .btn-primary-hero {
-      background: var(--charcoal); color: #fff; border: none; border-radius: 10px;
-      padding: 14px 28px; font-weight: 700; font-size: 0.92rem; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 9px; transition: all 0.22s;
-      letter-spacing: 0.01em;
+    .hero-ctas {
+      display: flex;
+      gap: 14px;
+      align-items: center;
     }
-    .btn-primary-hero:hover { background: #253040; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(26,35,50,.28); }
+    .btn-primary-hero {
+      background: #0F172A;
+      color: #FFFFFF;
+      border: none;
+      border-radius: 9999px;
+      padding: 13px 28px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.18);
+    }
+    .btn-primary-hero:hover {
+      background: #1E293B;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 26px rgba(15, 23, 42, 0.28);
+    }
+    .btn-primary-hero:hover .btn-hero-arrow {
+      transform: translateX(4px);
+    }
+    .btn-hero-arrow {
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
 
     .btn-secondary-hero {
-      background: transparent; color: var(--charcoal); border: 1.5px solid rgba(26,35,50,.25); border-radius: 10px;
-      padding: 13px 24px; font-weight: 600; font-size: 0.92rem; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 9px; transition: all 0.22s;
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(8px);
+      color: #0F172A;
+      border: 1.5px solid rgba(148, 163, 184, 0.4);
+      border-radius: 9999px;
+      padding: 12px 24px;
+      font-weight: 600;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.25s ease;
     }
-    .btn-secondary-hero:hover { border-color: var(--charcoal); background: rgba(26,35,50,.05); }
+    .btn-secondary-hero:hover {
+      background: rgba(255, 255, 255, 0.9);
+      border-color: #64748B;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(100, 80, 50, 0.08);
+    }
     .btn-play-icon {
-      width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid var(--charcoal);
-      display: flex; align-items: center; justify-content: center; font-size: 0.6rem;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 1.5px solid #0F172A;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 2px;
+      transition: transform 0.2s ease;
+    }
+    .btn-secondary-hero:hover .btn-play-icon {
+      transform: scale(1.1);
     }
 
-    /* ── 3D INVOICE VISUALIZATION ── */
+    /* ── 3D HERO VISUALIZATION SCENE ── */
     .hero-right {
-      position: relative; display: flex; align-items: center; justify-content: center;
-      height: 560px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 470px;
+      perspective: 1400px;
+      user-select: none;
     }
-    /* The big glowing orbital circle behind the card */
-    .invoice-orbit-glow {
-      position: absolute; width: 420px; height: 420px; border-radius: 50%;
-      background: radial-gradient(circle, rgba(230,205,160,.45) 0%, rgba(240,215,160,.2) 40%, transparent 70%);
-      top: 50%; left: 50%; transform: translate(-50%,-50%);
-      z-index: 1; pointer-events: none;
-    }
-    /* The rounded base/platform shadow */
-    .invoice-platform {
-      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
-      width: 280px; height: 28px; border-radius: 50%;
-      background: radial-gradient(ellipse, rgba(180,140,90,.28) 0%, rgba(200,160,100,.10) 50%, transparent 75%);
-      z-index: 1; pointer-events: none;
-      filter: blur(6px);
-    }
-    /* 3D stage wrapper — receives dynamic transform on hover */
-    .invoice-stage-3d {
-      position: relative; z-index: 5; width: 310px;
-      transform: perspective(1400px) rotateX(8deg) rotateY(-14deg);
+
+    /* Interactive 3D Stage */
+    .hero-stage-3d {
+      position: relative;
+      width: 340px;
+      height: 470px;
       transform-style: preserve-3d;
-      transition: transform 0.08s linear;
+      transform: rotateX(var(--rotX, 8deg)) rotateY(var(--rotY, -14deg)) translateY(var(--floatY, 0px));
+      transition: transform 0.12s cubic-bezier(0.1, 0.9, 0.2, 1);
+    }
+
+    /* Pedestal Base Slab */
+    .pedestal-plate {
+      position: absolute;
+      bottom: -22px;
+      left: 50%;
+      transform: translateX(-50%) translateZ(-35px);
+      width: 440px;
+      height: 34px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #F5EDE2 0%, #E6DAC8 100%);
+      box-shadow: 0 30px 60px rgba(135, 105, 75, 0.22),
+                  0 8px 16px rgba(120, 90, 60, 0.10),
+                  inset 0 2px 2px rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(220, 205, 185, 0.7);
+    }
+
+    /* Back support card holder / easel */
+    .easel-back-slab {
+      position: absolute;
+      top: 8px;
+      left: 50%;
+      transform: translateX(-50%) translateZ(-18px) rotateX(2deg);
+      width: 360px;
+      height: 440px;
+      border-radius: 26px;
+      background: linear-gradient(145deg, #F6EFE5 0%, #E8DCCB 100%);
+      border: 1px solid rgba(225, 210, 190, 0.8);
+      box-shadow: 0 16px 36px rgba(120, 95, 65, 0.10);
+    }
+
+    /* Orbital Glowing Ellipse with traveling light photons */
+    .orbital-ring-container {
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      width: 610px;
+      height: 330px;
+      transform: translate(-50%, -46%) translateZ(-8px) rotateZ(-3deg);
+      pointer-events: none;
+      z-index: 12;
+    }
+    .orbital-svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .orbit-dot {
+      offset-path: ellipse(275px 105px at 305px 165px);
+      animation: orbitCruise 10s linear infinite;
+    }
+    .orbit-dot.dot-1 {
+      animation-delay: 0s;
+      filter: drop-shadow(0 0 6px #FDE047);
+    }
+    .orbit-dot.dot-2 {
+      animation-delay: -3.3s;
+      filter: drop-shadow(0 0 5px #F59E0B);
+    }
+    .orbit-dot.dot-3 {
+      animation-delay: -6.6s;
+      filter: drop-shadow(0 0 6px #FBBF24);
+    }
+    @keyframes orbitCruise {
+      0% { offset-distance: 0%; }
+      100% { offset-distance: 100%; }
+    }
+
+    /* ── THE CENTRAL TAX INVOICE CARD ── */
+    .invoice-sheet {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%) translateZ(12px);
+      width: 325px;
+      background: #FFFFFF;
+      border-radius: 18px;
+      padding: 20px 22px 16px;
+      box-shadow: 0 22px 50px rgba(130, 100, 65, 0.15),
+                  0 4px 12px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(230, 220, 205, 0.9);
+      z-index: 15;
+      font-size: 0.74rem;
+    }
+    .inv-header-title {
+      font-size: 0.88rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #0F172A;
+      text-align: center;
+      padding-bottom: 11px;
+      border-bottom: 1px solid #F1ECE4;
+      margin-bottom: 11px;
+    }
+
+    /* Metadata 2x2 grid */
+    .inv-meta-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      row-gap: 9px;
+      column-gap: 14px;
+      margin-bottom: 12px;
+    }
+    .inv-meta-cell {
+      display: flex;
+      flex-direction: column;
+    }
+    .inv-label-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+    .inv-lbl {
+      font-size: 0.60rem;
+      font-weight: 600;
+      color: #64748B;
+    }
+    .skel-pill {
+      height: 4px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .skel-s { width: 16px; }
+    .skel-m { width: 26px; }
+
+    .inv-val-primary {
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #0F172A;
+    }
+    .inv-val-mono {
+      font-size: 0.67rem;
+      font-weight: 700;
+      color: #475569;
+      font-family: 'JetBrains Mono', Consolas, monospace;
+    }
+
+    /* Table */
+    .inv-items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.66rem;
+      margin-bottom: 9px;
+    }
+    .inv-items-table th {
+      background: #F8F6F2;
+      color: #64748B;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.55rem;
+      letter-spacing: 0.04em;
+      padding: 5px 3px;
+      text-align: left;
+      border-bottom: 1px solid #ECE6DC;
+    }
+    .inv-items-table td {
+      padding: 5px 3px;
+      color: #1E293B;
+      border-bottom: 1px solid #F4EFEB;
+      font-size: 0.65rem;
+    }
+    .inv-items-table td.item-name {
+      font-weight: 600;
+      color: #0F172A;
+    }
+
+    /* Bottom section: left skeleton bars, right totals */
+    .inv-bottom-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding-top: 8px;
+      border-top: 1px solid #F1ECE4;
+    }
+    .inv-skel-notes {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      width: 90px;
+    }
+    .skel-line {
+      height: 4px;
+      background: #E2E8F0;
+      border-radius: 4px;
+      display: block;
+    }
+    .w-80 { width: 75px; }
+    .w-60 { width: 55px; }
+    .w-90 { width: 85px; }
+    .w-45 { width: 40px; }
+
+    .inv-totals-box {
+      width: 150px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .tot-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.64rem;
+      color: #64748B;
+    }
+    .tot-row span:last-child {
+      color: #1E293B;
+      font-weight: 600;
+    }
+    .tot-grand {
+      margin-top: 3px;
+      padding-top: 3px;
+      border-top: 1px solid #E5DFD5;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: #0F172A;
+    }
+    .tot-grand-val {
+      font-size: 0.78rem;
+      color: #0F172A;
+      font-weight: 800;
+    }
+
+    /* ── LEFT FLOATING CARDS ── */
+    .float-col-left {
+      position: absolute;
+      left: -202px;
+      top: 48%;
+      transform: translateY(-50%) translateZ(35px);
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+      z-index: 22;
+    }
+    .float-card {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      border-radius: 14px;
+      padding: 9px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 26px rgba(120, 95, 60, 0.08),
+                  0 2px 6px rgba(0, 0, 0, 0.03);
+      min-width: 182px;
       cursor: pointer;
-      filter: drop-shadow(0 28px 44px rgba(26,35,50,.18)) drop-shadow(0 6px 16px rgba(26,35,50,.10));
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    /* Floating status chips on left */
-    .inv-float-cards {
-      position: absolute; left: -140px; top: 50%; transform: translateY(-50%);
-      display: flex; flex-direction: column; gap: 10px; z-index: 8;
+    .float-card:hover {
+      background: #FFFFFF;
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 16px 36px rgba(120, 95, 60, 0.14);
     }
-    .inv-float-card {
-      background: rgba(255,255,255,0.92); border: 1px solid rgba(210,195,175,.7);
-      border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px;
-      box-shadow: 0 4px 20px rgba(26,35,50,.08), 0 1px 4px rgba(26,35,50,.06);
-      backdrop-filter: blur(8px); min-width: 170px;
-      animation: floatCard 3.5s ease-in-out infinite;
+
+    /* Staggered floating animations for left cards */
+    .card-left-1 { animation: floatL1 4.5s ease-in-out infinite; }
+    .card-left-2 { animation: floatL2 5.2s ease-in-out infinite 0.7s; }
+    .card-left-3 { animation: floatL3 4.8s ease-in-out infinite 1.4s; }
+
+    @keyframes floatL1 {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(-0.5deg); }
     }
-    .inv-float-card:nth-child(2) { animation-delay: -1.2s; }
-    .inv-float-card:nth-child(3) { animation-delay: -2.4s; }
-    @keyframes floatCard {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
+    @keyframes floatL2 {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-9px) rotate(0.4deg); }
     }
-    .inv-float-icon {
-      width: 32px; height: 32px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center; font-size: 1rem;
+    @keyframes floatL3 {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(-0.4deg); }
+    }
+
+    .float-card-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #F8FAFC;
+      border: 1px solid #E2E8F0;
       flex-shrink: 0;
     }
-    .inv-float-icon.blue { background: #EFF6FF; }
-    .inv-float-icon.green { background: #F0FDF4; }
-    .inv-float-icon.purple { background: #FAF5FF; }
-    .inv-float-title { font-size: 0.78rem; font-weight: 700; color: var(--charcoal); }
-    .inv-float-sub { font-size: 0.65rem; color: var(--slate); margin-top: 1px; }
-    .inv-float-check {
-      margin-left: auto; width: 18px; height: 18px; border-radius: 50%;
-      background: #22C55E; display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 0.6rem; flex-shrink: 0;
+    .float-card-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #0F172A;
+      line-height: 1.2;
     }
-    .inv-float-arrow {
-      margin-left: auto; color: var(--slate); font-size: 0.75rem;
+    .float-card-sub {
+      font-size: 0.64rem;
+      color: #64748B;
+      margin-top: 1px;
     }
-    /* Status badges on the right */
-    .inv-status-badges {
-      position: absolute; right: -130px; top: 50%; transform: translateY(-50%);
-      display: flex; flex-direction: column; gap: 10px; z-index: 8;
+    .float-card-check {
+      margin-left: auto;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #22C55E;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(34, 197, 94, 0.35);
     }
-    .inv-status-badge {
-      background: rgba(255,255,255,0.92); border: 1px solid rgba(210,195,175,.7);
-      border-radius: 12px; padding: 10px 14px; display: flex; align-items: center; gap: 10px;
-      box-shadow: 0 4px 20px rgba(26,35,50,.08); backdrop-filter: blur(8px); min-width: 120px;
-      animation: floatBadge 3.5s ease-in-out infinite;
+    .float-card-arrow {
+      margin-left: auto;
+      color: #64748B;
+      font-size: 0.92rem;
+      font-weight: 600;
+      transition: transform 0.2s ease;
     }
-    .inv-status-badge:nth-child(2) { animation-delay: -1s; }
-    .inv-status-badge:nth-child(3) { animation-delay: -2s; }
-    @keyframes floatBadge {
-      0%,100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-    .inv-status-icon {
-      width: 28px; height: 28px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 0.75rem; flex-shrink: 0;
-    }
-    .inv-status-icon.verified { background: #F0FDF4; color: #16A34A; border: 1.5px solid #86EFAC; }
-    .inv-status-icon.repaired { background: #FEF3C7; color: #D97706; border: 1.5px solid #FCD34D; }
-    .inv-status-icon.review   { background: #FEF2F2; color: #DC2626; border: 1.5px solid #FCA5A5; }
-    .inv-status-label { font-size: 0.76rem; font-weight: 700; color: var(--charcoal); }
-    .inv-status-count { font-size: 0.65rem; color: var(--slate); margin-top: 1px; }
-
-    /* The actual invoice card */
-    .invoice-card {
-      background: #FFFFFF; border-radius: 16px; padding: 22px;
-      border: 1px solid rgba(220,210,195,.8);
-      box-shadow: 0 2px 8px rgba(26,35,50,.04);
-    }
-    .inv-header {
-      font-size: 0.82rem; font-weight: 800; letter-spacing: 0.12em; color: var(--charcoal);
-      margin-bottom: 14px; text-align: center;
-      border-bottom: 1px solid #F0EDE8; padding-bottom: 10px;
-    }
-    .inv-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-    .inv-meta-lbl { font-size: 0.6rem; color: var(--slate); text-transform: uppercase; font-weight: 600; letter-spacing: 0.04em; }
-    .inv-meta-val { font-size: 0.76rem; font-weight: 700; color: var(--charcoal); margin-top: 2px; }
-    .inv-table { width: 100%; font-size: 0.67rem; border-collapse: collapse; margin-bottom: 8px; }
-    .inv-table th {
-      text-align: left; color: var(--slate); font-weight: 600; padding: 5px 4px;
-      border-bottom: 1px solid #F0EDE8; font-size: 0.62rem; text-transform: uppercase;
-    }
-    .inv-table td { padding: 5px 4px; color: var(--charcoal); border-bottom: 1px solid rgba(240,237,232,.6); }
-    .inv-totals { border-top: 1px solid #F0EDE8; padding-top: 8px; margin-top: 2px; }
-    .inv-total-row { display: flex; justify-content: space-between; font-size: 0.68rem; margin-bottom: 3px; color: var(--charcoal); }
-    .inv-total-row.grand {
-      font-weight: 800; font-size: 0.82rem; color: var(--charcoal);
-      margin-top: 5px; border-top: 1px solid #E8E0D5; padding-top: 5px;
+    .float-card:hover .float-card-arrow {
+      transform: translateX(3px);
+      color: #0F172A;
     }
 
-    /* ── FEATURES BAR ── */
+    /* ── RIGHT FLOATING STATUS CARDS ── */
+    .float-col-right {
+      position: absolute;
+      right: -150px;
+      top: 48%;
+      transform: translateY(-50%) translateZ(35px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      z-index: 22;
+    }
+    .status-badge {
+      backdrop-filter: blur(12px);
+      border-radius: 15px;
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 24px rgba(120, 95, 60, 0.08);
+      min-width: 135px;
+      cursor: pointer;
+      transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .status-badge:hover {
+      transform: translateY(-4px) scale(1.03);
+      box-shadow: 0 16px 36px rgba(120, 95, 60, 0.15);
+    }
+
+    /* Badge Themes matching exact image colors */
+    .badge-verified {
+      background: rgba(220, 252, 231, 0.88);
+      border: 1px solid rgba(167, 243, 208, 0.7);
+    }
+    .badge-repaired {
+      background: rgba(254, 243, 199, 0.88);
+      border: 1px solid rgba(253, 230, 138, 0.7);
+    }
+    .badge-review {
+      background: rgba(254, 226, 226, 0.88);
+      border: 1px solid rgba(254, 202, 202, 0.7);
+    }
+
+    /* Staggered float animations for right badges */
+    .badge-verified { animation: floatR1 4.2s ease-in-out infinite 0.3s; }
+    .badge-repaired { animation: floatR2 4.9s ease-in-out infinite 1.1s; }
+    .badge-review   { animation: floatR3 5.5s ease-in-out infinite 1.8s; }
+
+    @keyframes floatR1 {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-7px) rotate(0.4deg); }
+    }
+    @keyframes floatR2 {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-9px) rotate(-0.4deg); }
+    }
+    @keyframes floatR3 {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      50% { transform: translateY(-6px) rotate(0.3deg); }
+    }
+
+    .status-badge-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .icon-verified-check {
+      background: #A7F3D0;
+    }
+    .icon-repaired-wrench {
+      background: #FDE68A;
+    }
+    .icon-review-warn {
+      background: #FECACA;
+    }
+
+    .status-badge-title {
+      font-size: 0.80rem;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .badge-verified .status-badge-title { color: #065F46; }
+    .badge-repaired .status-badge-title { color: #92400E; }
+    .badge-review   .status-badge-title { color: #991B1B; }
+
+    .status-badge-sub {
+      font-size: 0.66rem;
+      margin-top: 1px;
+    }
+    .badge-verified .status-badge-sub { color: #047857; }
+    .badge-repaired .status-badge-sub { color: #B45309; }
+    .badge-review   .status-badge-sub { color: #B91C1C; }
+
+    /* ── BOTTOM FEATURES BAR ── */
     .features-bar {
-      position: relative; z-index: 5; display: flex; justify-content: center; align-items: center; gap: 52px;
-      padding: 22px 52px 32px; border-top: 1px solid rgba(195,175,145,.22);
+      position: relative;
+      z-index: 10;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      gap: 32px;
+      padding: 10px 56px 16px;
+      margin-top: auto;
     }
-    .feat-item { display: flex; align-items: center; gap: 10px; }
-    .feat-item-icon { font-size: 1.1rem; opacity: 0.7; }
-    .feat-item-label { font-size: 0.79rem; font-weight: 500; color: var(--slate); }
-    .feat-item-label strong { display: block; color: var(--charcoal); font-size: 0.83rem; font-weight: 700; margin-bottom: 1px; }
-    .feat-sep { width: 1px; height: 36px; background: rgba(195,175,145,.4); }
+    .feat-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+    .feat-item:hover {
+      transform: translateY(-2px);
+    }
+    .feat-icon {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.8;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+    .feat-item:hover .feat-icon {
+      opacity: 1;
+      transform: scale(1.1);
+    }
+    .feat-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.25;
+    }
+    .feat-top {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #0F172A;
+    }
+    .feat-btm {
+      font-size: 0.72rem;
+      font-weight: 500;
+      color: #64748B;
+    }
+    .feat-divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(148, 163, 184, 0.35);
+    }
 
     /* ─────────────────────── MAIN WORKSPACE APPLICATION ─────────────────────── */
     #app { display: none; min-height: 100vh; background: var(--ivory); position: relative; overflow-x: hidden; }
@@ -614,21 +1178,21 @@
 <!-- ═══════════════════════════════════════════
      LANDING PAGE
 ══════════════════════════════════════════════ -->
-<div id="landing" style="display:none;">
-  <!-- Coin animation canvas overlaid on landing -->
-  <canvas id="landingCoinCanvas"></canvas>
+<div id="landing">
+  <!-- Radiant Ambient Lighting -->
+  <div class="landing-ambient-glow"></div>
 
   <nav class="nav">
-    <div class="nav-logo">
+    <div class="nav-logo" onclick="goLanding()">
       <div class="nav-logo-icon">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="7" stroke-width="2"/>
-          <path d="M12 9v3l2 2" stroke-linecap="round"/>
-          <line x1="17.5" y1="17.5" x2="21" y2="21" stroke-linecap="round"/>
+        <svg viewBox="0 0 36 36" fill="none">
+          <circle cx="18" cy="18" r="14.5" stroke="#2563EB" stroke-width="2.6"/>
+          <circle cx="18" cy="18" r="9" stroke="#3B82F6" stroke-width="2.2" stroke-dasharray="18 8"/>
+          <circle cx="18" cy="18" r="4.5" fill="#1D4ED8"/>
         </svg>
       </div>
-      <div>
-        <div class="nav-brand-name">GSTLens</div>
+      <div class="nav-brand-text">
+        <div class="nav-brand-name"><span class="brand-dark">GST</span><span class="brand-blue">Lens</span></div>
         <div class="nav-brand-sub">GST Invoice Intelligence System</div>
       </div>
     </div>
@@ -641,10 +1205,13 @@
     </div>
     <div class="nav-right">
       <div class="nav-status">
-        <span class="nav-status-dot"></span>
+        <span class="nav-status-ping-wrap">
+          <span class="nav-status-ping"></span>
+          <span class="nav-status-dot"></span>
+        </span>
         System Ready
       </div>
-      <button class="btn-launch" onclick="launchApp('judge')">Launch App &rarr;</button>
+      <button class="btn-launch" onclick="launchApp('judge')">Launch App <span class="arrow">&rarr;</span></button>
     </div>
   </nav>
 
@@ -652,9 +1219,9 @@
     <div class="hero-left">
       <div class="hero-eyebrow">
         <span>AUTOMATE</span>
-        <span class="hero-eyebrow-dot"></span>
+        <span class="hero-eyebrow-dot">&bull;</span>
         <span>VERIFY</span>
-        <span class="hero-eyebrow-dot"></span>
+        <span class="hero-eyebrow-dot">&bull;</span>
         <span>STAY COMPLIANT</span>
       </div>
       <h1 class="hero-h1">
@@ -666,115 +1233,318 @@
       </p>
       <div class="hero-ctas">
         <button class="btn-primary-hero" onclick="launchApp('judge')">
-          Start Auditing Now &rarr;
+          <span>Start Auditing Now</span>
+          <span class="btn-hero-arrow">&rarr;</span>
         </button>
         <button class="btn-secondary-hero" onclick="launchApp('workspace')">
-          <span class="btn-play-icon">&#9654;</span>
-          Watch Demo
+          <span class="btn-play-icon">
+            <svg viewBox="0 0 24 24" width="10" height="10" fill="#0F172A">
+              <polygon points="6,4 20,12 6,20"/>
+            </svg>
+          </span>
+          <span>Watch Demo</span>
         </button>
       </div>
     </div>
 
-    <div class="hero-right">
-      <!-- Orbital glow behind card -->
-      <div class="invoice-orbit-glow"></div>
-      <!-- Shadow platform below card -->
-      <div class="invoice-platform"></div>
+    <div class="hero-right" id="heroRightInteractive">
+      <!-- The 3D Composition Stage -->
+      <div class="hero-stage-3d" id="heroStage3D">
+        
+        <!-- 3D Pedestal Platform Base -->
+        <div class="pedestal-plate"></div>
 
-      <!-- Floating status cards (left) -->
-      <div class="inv-float-cards">
-        <div class="inv-float-card">
-          <div class="inv-float-icon blue">📄</div>
-          <div>
-            <div class="inv-float-title">Data Extracted</div>
-            <div class="inv-float-sub">Invoice &bull; Party &bull; Items</div>
-          </div>
-          <div class="inv-float-check">&#10003;</div>
-        </div>
-        <div class="inv-float-card">
-          <div class="inv-float-icon green">🛡️</div>
-          <div>
-            <div class="inv-float-title">GST Rules Verified</div>
-            <div class="inv-float-sub">8/8 Rules Passed</div>
-          </div>
-          <div class="inv-float-check">&#10003;</div>
-        </div>
-        <div class="inv-float-card">
-          <div class="inv-float-icon purple">📊</div>
-          <div>
-            <div class="inv-float-title">Ready for Export</div>
-            <div class="inv-float-sub">JSON / CSV</div>
-          </div>
-          <div class="inv-float-arrow">&#8594;</div>
-        </div>
-      </div>
+        <!-- Back support card holder / easel -->
+        <div class="easel-back-slab"></div>
 
-      <!-- 3D Invoice card — hover rotates it -->
-      <div class="invoice-stage-3d" id="invoiceCard3D"
-           onmousemove="onInvMouseMove(event)"
-           onmouseleave="onInvMouseLeave()">
-        <div class="invoice-card">
-          <div class="inv-header">TAX INVOICE</div>
-          <div class="inv-meta">
-            <div><div class="inv-meta-lbl">Invoice No.</div><div class="inv-meta-val">INV-2024-001</div></div>
-            <div><div class="inv-meta-lbl">Date</div><div class="inv-meta-val">15 Aug 2024</div></div>
+        <!-- Golden Orbital Ellipse with traveling light photons -->
+        <div class="orbital-ring-container">
+          <svg class="orbital-svg" viewBox="0 0 610 330" fill="none">
+            <defs>
+              <linearGradient id="orbitGlowGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#EAB308" stop-opacity="0.2"/>
+                <stop offset="35%" stop-color="#F59E0B" stop-opacity="0.88"/>
+                <stop offset="70%" stop-color="#D97706" stop-opacity="0.95"/>
+                <stop offset="100%" stop-color="#B45309" stop-opacity="0.25"/>
+              </linearGradient>
+              <filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
+                <feGaussianBlur stdDeviation="3" result="blur"/>
+                <feMerge>
+                  <feMergeNode in="blur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <ellipse cx="305" cy="165" rx="275" ry="105" stroke="url(#orbitGlowGrad)" stroke-width="1.8" filter="url(#goldGlow)"/>
+            <circle class="orbit-dot dot-1" r="4.5" fill="#FEF08A"/>
+            <circle class="orbit-dot dot-2" r="3.2" fill="#FDE047"/>
+            <circle class="orbit-dot dot-3" r="4" fill="#F59E0B"/>
+          </svg>
+        </div>
+
+        <!-- 3 Left Floating Cards -->
+        <div class="float-col-left">
+          <!-- Card 1: Data Extracted -->
+          <div class="float-card card-left-1" onclick="launchApp('judge')">
+            <div class="float-card-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748B" stroke-width="1.8">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="16" y1="13" x2="8" y2="13"/>
+                <line x1="16" y1="17" x2="8" y2="17"/>
+              </svg>
+            </div>
+            <div class="float-card-text">
+              <div class="float-card-title">Data Extracted</div>
+              <div class="float-card-sub">Invoice &bull; Party &bull; Items</div>
+            </div>
+            <div class="float-card-check">
+              <svg viewBox="0 0 20 20" width="12" height="12" fill="none" stroke="#FFF" stroke-width="2.5">
+                <polyline points="4 10 8 14 16 6"/>
+              </svg>
+            </div>
           </div>
-          <div class="inv-meta">
-            <div><div class="inv-meta-lbl">Supplier GSTIN Issue</div><div class="inv-meta-val" style="color:#1E3A8A;font-size:0.65rem;">27ABCDE1234F1Z5</div></div>
-            <div><div class="inv-meta-lbl">Buyer GSTIN Issue</div><div class="inv-meta-val" style="color:#1E3A8A;font-size:0.65rem;">29XYZ0E5678K1Z1</div></div>
+
+          <!-- Card 2: GST Rules Verified -->
+          <div class="float-card card-left-2" onclick="launchApp('rules')">
+            <div class="float-card-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748B" stroke-width="1.8">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <div class="float-card-text">
+              <div class="float-card-title">GST Rules Verified</div>
+              <div class="float-card-sub">8/8 Passed</div>
+            </div>
+            <div class="float-card-check">
+              <svg viewBox="0 0 20 20" width="12" height="12" fill="none" stroke="#FFF" stroke-width="2.5">
+                <polyline points="4 10 8 14 16 6"/>
+              </svg>
+            </div>
           </div>
-          <table class="inv-table">
-            <thead><tr><th>Item</th><th>HSN/SAC</th><th>Qty</th><th>Rate</th><th>Amount</th></tr></thead>
+
+          <!-- Card 3: Ready for Export -->
+          <div class="float-card card-left-3" onclick="launchApp('workspace')">
+            <div class="float-card-icon">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="#64748B" stroke-width="1.8">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+                <line x1="8" y1="13" x2="16" y2="13"/>
+                <line x1="8" y1="17" x2="16" y2="17"/>
+              </svg>
+            </div>
+            <div class="float-card-text">
+              <div class="float-card-title">Ready for Export</div>
+              <div class="float-card-sub">JSON / CSV</div>
+            </div>
+            <div class="float-card-arrow">&rarr;</div>
+          </div>
+        </div>
+
+        <!-- The 3D Tax Invoice Card -->
+        <div class="invoice-sheet" id="invoiceSheet3D">
+          <div class="inv-header-title">TAX INVOICE</div>
+
+          <div class="inv-meta-grid">
+            <div class="inv-meta-cell">
+              <div class="inv-label-row">
+                <span class="inv-lbl">Invoice No.</span>
+                <span class="skel-pill skel-s"></span>
+              </div>
+              <div class="inv-val-primary">INV-2024-001</div>
+            </div>
+            <div class="inv-meta-cell">
+              <div class="inv-label-row">
+                <span class="inv-lbl">Date</span>
+              </div>
+              <div class="inv-val-primary">15 Aug 2024</div>
+            </div>
+            <div class="inv-meta-cell">
+              <div class="inv-label-row">
+                <span class="inv-lbl">Supplier GSTIN</span>
+                <span class="skel-pill skel-m"></span>
+              </div>
+              <div class="inv-val-mono">27ABCDE1234F1Z5</div>
+            </div>
+            <div class="inv-meta-cell">
+              <div class="inv-label-row">
+                <span class="inv-lbl">Buyer GSTIN</span>
+                <span class="skel-pill skel-m"></span>
+              </div>
+              <div class="inv-val-mono">29XYZDE5678K1Z1</div>
+            </div>
+          </div>
+
+          <table class="inv-items-table">
+            <thead>
+              <tr>
+                <th>Item</th>
+                <th>HSN/SAC</th>
+                <th>Qty</th>
+                <th>Rate</th>
+                <th style="text-align:right;">Amount</th>
+              </tr>
+            </thead>
             <tbody>
-              <tr><td>Laptop</td><td>8471</td><td>2</td><td>32,000</td><td>63,680</td></tr>
-              <tr><td>Adapter</td><td>8504</td><td>5</td><td>1,200</td><td>7,080</td></tr>
-              <tr><td>Monitor</td><td>8523</td><td>1</td><td>15,000</td><td>17,700</td></tr>
+              <tr>
+                <td class="item-name">Laptop</td>
+                <td>8471</td>
+                <td>2</td>
+                <td>32,000</td>
+                <td style="text-align:right;">63,680</td>
+              </tr>
+              <tr>
+                <td class="item-name">Adapter</td>
+                <td>8504</td>
+                <td>5</td>
+                <td>1,200</td>
+                <td style="text-align:right;">7,080</td>
+              </tr>
+              <tr>
+                <td class="item-name">Monitor</td>
+                <td>8523</td>
+                <td>1</td>
+                <td>15,000</td>
+                <td style="text-align:right;">17,700</td>
+              </tr>
             </tbody>
           </table>
-          <div class="inv-totals">
-            <div class="inv-total-row"><span>Taxable Value</span><span>&#8377;74,400.00</span></div>
-            <div class="inv-total-row"><span>CGST (9%)</span><span>&#8377;6,696.00</span></div>
-            <div class="inv-total-row"><span>SGST (9%)</span><span>&#8377;6,696.00</span></div>
-            <div class="inv-total-row grand"><span>Grand Total</span><span>&#8377;87,792.00</span></div>
-          </div>
-        </div>
-      </div>
 
-      <!-- Status badges (right) -->
-      <div class="inv-status-badges">
-        <div class="inv-status-badge">
-          <div class="inv-status-icon verified">&#10003;</div>
-          <div>
-            <div class="inv-status-label">Verified</div>
-            <div class="inv-status-count">3 invoices</div>
+          <div class="inv-bottom-section">
+            <div class="inv-skel-notes">
+              <span class="skel-line w-80"></span>
+              <span class="skel-line w-60"></span>
+              <span class="skel-line w-90"></span>
+              <span class="skel-line w-45"></span>
+            </div>
+
+            <div class="inv-totals-box">
+              <div class="tot-row">
+                <span>Taxable Value</span>
+                <span>&#8377;74,400.00</span>
+              </div>
+              <div class="tot-row">
+                <span>CGST (9%)</span>
+                <span>&#8377;6,696.00</span>
+              </div>
+              <div class="tot-row">
+                <span>SGST (9%)</span>
+                <span>&#8377;6,696.00</span>
+              </div>
+              <div class="tot-row tot-grand">
+                <span>Grand Total</span>
+                <span class="tot-grand-val">&#8377;87,792.00</span>
+              </div>
+            </div>
           </div>
         </div>
-        <div class="inv-status-badge">
-          <div class="inv-status-icon repaired">&#128295;</div>
-          <div>
-            <div class="inv-status-label">Repaired</div>
-            <div class="inv-status-count">3 invoices</div>
+
+        <!-- 3 Right Floating Status Cards -->
+        <div class="float-col-right">
+          <!-- Badge 1: Verified -->
+          <div class="status-badge badge-verified" onclick="launchApp('judge')">
+            <div class="status-badge-icon icon-verified-check">
+              <svg viewBox="0 0 20 20" width="13" height="13" fill="none" stroke="#059669" stroke-width="2.6">
+                <polyline points="4 10 8 14 16 6"/>
+              </svg>
+            </div>
+            <div class="status-badge-text">
+              <div class="status-badge-title">Verified</div>
+              <div class="status-badge-sub">8 invoices</div>
+            </div>
+          </div>
+
+          <!-- Badge 2: Repaired -->
+          <div class="status-badge badge-repaired" onclick="launchApp('judge')">
+            <div class="status-badge-icon icon-repaired-wrench">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="#D97706">
+                <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.6C.5 7 .9 10 2.9 12c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.3z"/>
+              </svg>
+            </div>
+            <div class="status-badge-text">
+              <div class="status-badge-title">Repaired</div>
+              <div class="status-badge-sub">3 invoices</div>
+            </div>
+          </div>
+
+          <!-- Badge 3: Needs Review -->
+          <div class="status-badge badge-review" onclick="launchApp('judge')">
+            <div class="status-badge-icon icon-review-warn">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="#DC2626">
+                <path d="M12 2L1 21h22L12 2zm0 4l7.5 13H4.5L12 6zm-1 5v4h2v-4h-2zm0 6v2h2v-2h-2z"/>
+              </svg>
+            </div>
+            <div class="status-badge-text">
+              <div class="status-badge-title">Needs Review</div>
+              <div class="status-badge-sub">1 invoice</div>
+            </div>
           </div>
         </div>
-        <div class="inv-status-badge">
-          <div class="inv-status-icon review">&#9888;</div>
-          <div>
-            <div class="inv-status-label">Needs Review</div>
-            <div class="inv-status-count">1 invoice</div>
-          </div>
-        </div>
+
       </div>
     </div>
   </section>
 
   <div class="features-bar">
-    <div class="feat-item"><span class="feat-item-icon">📄</span><div class="feat-item-label"><strong>Multi-format Upload</strong>PDF, Image, Excel, CSV</div></div>
-    <div class="feat-sep"></div>
-    <div class="feat-item"><span class="feat-item-icon">🛡️</span><div class="feat-item-label"><strong>GST Rule Validation</strong>8 Statutory Rules</div></div>
-    <div class="feat-sep"></div>
-    <div class="feat-item"><span class="feat-item-icon">🤖</span><div class="feat-item-label"><strong>AI-Powered Extraction</strong>OCR + Document AI</div></div>
-    <div class="feat-sep"></div>
-    <div class="feat-item"><span class="feat-item-icon">📋</span><div class="feat-item-label"><strong>Clean Audit Trail</strong>Traceable &amp; Exportable</div></div>
+    <div class="feat-item" onclick="launchApp('workspace')">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#475569" stroke-width="1.8">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+      </div>
+      <div class="feat-text">
+        <span class="feat-top">Multi-format</span>
+        <span class="feat-btm">Upload</span>
+      </div>
+    </div>
+
+    <div class="feat-divider"></div>
+
+    <div class="feat-item" onclick="launchApp('rules')">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#475569" stroke-width="1.8">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
+      <div class="feat-text">
+        <span class="feat-top">GST Rule</span>
+        <span class="feat-btm">Validation</span>
+      </div>
+    </div>
+
+    <div class="feat-divider"></div>
+
+    <div class="feat-item" onclick="launchApp('judge')">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#475569" stroke-width="1.8">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6" y1="20" x2="6" y2="14"/>
+        </svg>
+      </div>
+      <div class="feat-text">
+        <span class="feat-top">AI-Powered</span>
+        <span class="feat-btm">Extraction</span>
+      </div>
+    </div>
+
+    <div class="feat-divider"></div>
+
+    <div class="feat-item" onclick="launchApp('workspace')">
+      <div class="feat-icon">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#475569" stroke-width="1.8">
+          <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+          <rect x="8" y="2" width="8" height="4" rx="1" ry="1"/>
+        </svg>
+      </div>
+      <div class="feat-text">
+        <span class="feat-top">Clean Audit</span>
+        <span class="feat-btm">Trail</span>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1939,178 +2709,49 @@ function showToast(msg, isError){
   }, 3200);
 }
 
-/* ─────────────────────── 3D INVOICE HOVER ROTATION ─────────────────────── */
-var invTarget = { rx: 8, ry: -14 };
-var invCurrent = { rx: 8, ry: -14 };
-var invRafId = null;
-var invHovering = false;
+/* ─────────────────────── LIVELY 3D STAGE & MOUSE TRACKING ─────────────────────── */
+(function initLivelyHeroMotion() {
+  var stage = document.getElementById('heroStage3D');
+  var heroArea = document.querySelector('.hero');
+  if (!stage || !heroArea) return;
 
-function onInvMouseMove(e) {
-  var card = document.getElementById('invoiceCard3D');
-  if (!card) return;
-  var rect = card.getBoundingClientRect();
-  var cx = rect.left + rect.width / 2;
-  var cy = rect.top + rect.height / 2;
-  var dx = (e.clientX - cx) / (rect.width / 2);
-  var dy = (e.clientY - cy) / (rect.height / 2);
-  invTarget.ry = -14 + dx * 18;
-  invTarget.rx = 8 - dy * 10;
-  invHovering = true;
-  if (!invRafId) invRafId = requestAnimationFrame(invAnimLoop);
-}
+  var target = { rx: 8, ry: -14, floatY: 0 };
+  var current = { rx: 8, ry: -14, floatY: 0 };
+  var startTime = performance.now();
 
-function onInvMouseLeave() {
-  invTarget.rx = 8;
-  invTarget.ry = -14;
-  invHovering = false;
-}
+  heroArea.addEventListener('mousemove', function(e) {
+    var rect = heroArea.getBoundingClientRect();
+    var cx = rect.left + rect.width * 0.65;
+    var cy = rect.top + rect.height * 0.5;
+    var dx = (e.clientX - cx) / (rect.width * 0.5);
+    var dy = (e.clientY - cy) / (rect.height * 0.5);
+    target.ry = -14 + dx * 16;
+    target.rx = 8 - dy * 10;
+  });
 
-function invAnimLoop() {
-  var card = document.getElementById('invoiceCard3D');
-  var lerp = 0.10;
-  invCurrent.rx += (invTarget.rx - invCurrent.rx) * lerp;
-  invCurrent.ry += (invTarget.ry - invCurrent.ry) * lerp;
-  if (card) {
-    card.style.transform = 'perspective(1400px) rotateX(' + invCurrent.rx.toFixed(2) + 'deg) rotateY(' + invCurrent.ry.toFixed(2) + 'deg)';
+  heroArea.addEventListener('mouseleave', function() {
+    target.rx = 8;
+    target.ry = -14;
+  });
+
+  function animLoop(now) {
+    var elapsed = (now - startTime) / 1000;
+    // Gentle natural sinusoidal breathing float
+    var floatOsc = Math.sin(elapsed * 1.5) * 6;
+    target.floatY = floatOsc;
+
+    var lerp = 0.08;
+    current.rx += (target.rx - current.rx) * lerp;
+    current.ry += (target.ry - current.ry) * lerp;
+    current.floatY += (target.floatY - current.floatY) * lerp;
+
+    stage.style.setProperty('--rotX', current.rx.toFixed(2) + 'deg');
+    stage.style.setProperty('--rotY', current.ry.toFixed(2) + 'deg');
+    stage.style.setProperty('--floatY', current.floatY.toFixed(2) + 'px');
+
+    requestAnimationFrame(animLoop);
   }
-  var diffX = Math.abs(invTarget.rx - invCurrent.rx);
-  var diffY = Math.abs(invTarget.ry - invCurrent.ry);
-  if (diffX > 0.05 || diffY > 0.05) {
-    invRafId = requestAnimationFrame(invAnimLoop);
-  } else {
-    invRafId = null;
-  }
-}
-
-/* ─────────────────────── REALISTIC COIN ANIMATION ─────────────────────── */
-(function initLandingCoins() {
-  var canvas = document.getElementById('landingCoinCanvas');
-  if (!canvas) return;
-  var ctx = canvas.getContext('2d');
-  var coins = [];
-  var W, H;
-
-  function resize() {
-    W = canvas.width = canvas.offsetWidth;
-    H = canvas.height = canvas.offsetHeight;
-  }
-  resize();
-  window.addEventListener('resize', resize);
-
-  function rand(a, b) { return a + Math.random() * (b - a); }
-
-  function createCoin() {
-    var rx = rand(18, 30);
-    var ry = rx * rand(0.28, 0.42); // perspective squish
-    return {
-      x: rand(W * 0.35, W * 0.98),
-      y: rand(-80, -20),
-      rx: rx,
-      ry: ry,
-      vx: rand(-0.4, 0.4),
-      vy: rand(0.45, 0.9),
-      spin: rand(0, Math.PI * 2),
-      spinSpeed: rand(0.012, 0.035) * (Math.random() > 0.5 ? 1 : -1),
-      tilt: rand(0.2, 0.55),
-      alpha: rand(0.55, 0.9),
-      scale: rand(0.7, 1.2),
-      wobble: rand(0, Math.PI * 2),
-      wobbleSpeed: rand(0.008, 0.022),
-    };
-  }
-
-  for (var i = 0; i < 18; i++) {
-    var c = createCoin();
-    c.y = rand(0, H);
-    coins.push(c);
-  }
-
-  function drawCoin(co) {
-    ctx.save();
-    ctx.globalAlpha = co.alpha;
-    ctx.translate(co.x, co.y);
-    var tilt = Math.abs(Math.sin(co.spin)) * co.tilt + (1 - co.tilt);
-    var rx = co.rx * co.scale;
-    var ry = co.ry * co.scale * tilt;
-    if (ry < 1) { ctx.restore(); return; }
-
-    // Drop shadow
-    ctx.shadowColor = 'rgba(140,90,20,0.25)';
-    ctx.shadowBlur = 8;
-    ctx.shadowOffsetY = 4;
-
-    // Coin body — warm gold gradient
-    var grad = ctx.createRadialGradient(-rx * 0.3, -ry * 0.35, rx * 0.05, 0, 0, rx);
-    grad.addColorStop(0.0, '#F5D87A');  // bright highlight
-    grad.addColorStop(0.25,'#E8B840'); // warm gold
-    grad.addColorStop(0.6, '#C8943A'); // mid gold
-    grad.addColorStop(0.85,'#A06820'); // shadow edge
-    grad.addColorStop(1.0, '#7A4E14'); // deep rim
-
-    ctx.beginPath();
-    ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
-    ctx.fillStyle = grad;
-    ctx.fill();
-    ctx.shadowColor = 'transparent';
-
-    // Rim highlight (top arc)
-    ctx.beginPath();
-    ctx.ellipse(0, -ry * 0.15, rx * 0.88, ry * 0.55, 0, Math.PI, 0);
-    ctx.strokeStyle = 'rgba(255,230,120,0.55)';
-    ctx.lineWidth = 1.2;
-    ctx.stroke();
-
-    // Edge ring
-    ctx.beginPath();
-    ctx.ellipse(0, 0, rx * 0.86, ry * 0.86, 0, 0, Math.PI * 2);
-    ctx.strokeStyle = 'rgba(160,104,32,0.5)';
-    ctx.lineWidth = 0.8;
-    ctx.stroke();
-
-    // Rupee symbol
-    if (ry > 5) {
-      var fs = Math.max(6, rx * 0.72);
-      ctx.font = 'bold ' + fs + 'px Inter, sans-serif';
-      ctx.textAlign = 'center';
-      ctx.textBaseline = 'middle';
-      // shadow under glyph
-      ctx.fillStyle = 'rgba(100,60,10,0.35)';
-      ctx.fillText('₹', 0.8, 0.8);
-      ctx.fillStyle = 'rgba(255,240,180,0.9)';
-      ctx.fillText('₹', 0, 0);
-    }
-
-    // Sheen sweep
-    var sheenGrad = ctx.createLinearGradient(-rx, -ry, rx * 0.4, ry * 0.4);
-    sheenGrad.addColorStop(0, 'rgba(255,245,200,0.38)');
-    sheenGrad.addColorStop(0.5,'rgba(255,245,200,0.08)');
-    sheenGrad.addColorStop(1, 'rgba(255,245,200,0)');
-    ctx.beginPath();
-    ctx.ellipse(0, 0, rx, ry, 0, 0, Math.PI * 2);
-    ctx.fillStyle = sheenGrad;
-    ctx.fill();
-
-    ctx.restore();
-  }
-
-  function tick() {
-    ctx.clearRect(0, 0, W, H);
-    for (var i = 0; i < coins.length; i++) {
-      var co = coins[i];
-      co.y += co.vy;
-      co.x += co.vx + Math.sin(co.wobble) * 0.3;
-      co.spin += co.spinSpeed;
-      co.wobble += co.wobbleSpeed;
-      // Gentle drift back
-      co.vx *= 0.999;
-      drawCoin(co);
-      if (co.y > H + 60) {
-        coins[i] = createCoin();
-      }
-    }
-    requestAnimationFrame(tick);
-  }
-  tick();
+  requestAnimationFrame(animLoop);
 })();
 
 // Synchronous immediate render
