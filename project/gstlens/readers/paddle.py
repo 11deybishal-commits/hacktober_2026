@@ -65,8 +65,13 @@ class PaddleReader(BaseReader):
             self.last_quality_score = quality
         except Exception as e:
             logger.warning("Preprocessing failed: %s, falling back to raw load", e)
-            enhanced_img = load_image(document_input)
-            self.last_quality_score = 0.5
+            try:
+                enhanced_img = load_image(document_input)
+                self.last_quality_score = 0.5
+            except Exception as e2:
+                logger.warning("Raw image load also failed: %s", e2)
+                enhanced_img = None
+                self.last_quality_score = 0.5
 
         if enhanced_img is None or enhanced_img.size == 0:
             return {"supplier": {}, "buyer": {}, "line_items": [], "totals": {}}

@@ -1,421 +1,4 @@
-"""
-GSTLens FastAPI Backend & Interactive Audit Workspace.
-Provides REST endpoints and serves the sophisticated GSTLens Audit UI with:
-- Warm Ivory / Gold fintech aesthetic
-- Hackathon Judge Challenge Suite (3 deterministic benchmark scenarios)
-- Interactive side-by-side invoice comparison with terracotta bounding boxes
-- Explainable GST rule engine with expected vs extracted vs delta
-- Before-and-after constraint repair timeline with reviewer accept/reject actions
-- Live audit pipeline tracker
-- Financial impact & vendor risk dashboard
-- Cross-invoice batch anomaly detection
-- Printable / downloadable Official GST Audit Certification Report
-"""
-import os
-import sys
-import uuid
-import json
-import logging
-from decimal import Decimal
-from typing import List, Dict, Any, Optional
-
-# Ensure project root is in sys.path
-PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-if PROJECT_ROOT not in sys.path:
-    sys.path.insert(0, PROJECT_ROOT)
-
-from fastapi import FastAPI, File, UploadFile, HTTPException, Query, Body
-from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse, FileResponse
-from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
-
-from gstlens.pipeline import pipeline
-from gstlens.contracts import InvoiceRecord, Provenance
-from gstlens.export.json_csv import export_to_json, export_to_csv
-from gstlens.api.seed_demo import build_seed_records
-
-logger = logging.getLogger(__name__)
-
-app = FastAPI(
-    title="GSTLens API",
-    description="End-to-End AI-Powered GST Invoice Intelligence System",
-    version="2.0.0",
-)
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-# In-memory session store
-RECORDS_STORE: Dict[str, InvoiceRecord] = {}
-DOCUMENT_FILES: Dict[str, str] = {}
-TEMP_UPLOAD_DIR = os.path.join(PROJECT_ROOT, "temp_uploads")
-os.makedirs(TEMP_UPLOAD_DIR, exist_ok=True)
-
-
-def init_seed_records():
-    """Seeds the 3 deterministic Challenge GSTLens benchmark invoices."""
-    seeds = build_seed_records()
-    for doc_id, (rec, file_path) in seeds.items():
-        if doc_id not in RECORDS_STORE:
-            RECORDS_STORE[doc_id] = rec
-            DOCUMENT_FILES[doc_id] = file_path
-
-
-# Initialize seeds immediately on startup
-init_seed_records()
-
-
-@app.on_event("startup")
-def on_startup():
-    init_seed_records()
-
-
-@app.get("/api/health")
-def health():
-    return {"status": "ok", "records_count": len(RECORDS_STORE)}
-
-
-@app.get("/api/demo/seed")
-def seed_demo_endpoint():
-    """Reseeds or refreshes the 3 Challenge GSTLens demo invoices."""
-    init_seed_records()
-    return {"status": "success", "count": len(RECORDS_STORE)}
-
-
-@app.post("/api/upload")
-async def upload_files(files: List[UploadFile] = File(...)):
-    """Accepts multiple invoice files, runs the GSTLens pipeline, and stores results."""
-    uploaded_records = []
-
-    for file in files:
-        file_ext = os.path.splitext(file.filename)[1].lower()
-        if file_ext not in [".xlsx", ".xls", ".csv", ".pdf", ".jpg", ".jpeg", ".png", ".svg"]:
-            continue
-
-        saved_path = os.path.join(TEMP_UPLOAD_DIR, f"{uuid.uuid4()}_{file.filename}")
-        with open(saved_path, "wb") as f:
-            content = await file.read()
-            f.write(content)
-
-        try:
-            records = pipeline.process_file(saved_path)
-            for rec in records:
-                rec.filename = file.filename
-                RECORDS_STORE[rec.document_id] = rec
-                DOCUMENT_FILES[rec.document_id] = saved_path
-                uploaded_records.append(rec.model_dump(mode="json"))
-        except Exception as e:
-            logger.exception("Failed to process %s", file.filename)
-            return JSONResponse(
-                status_code=400,
-                content={"error": f"Failed to process {file.filename}: {str(e)}"}
-            )
-
-    return {"status": "success", "processed_count": len(uploaded_records), "records": uploaded_records}
-
-
-@app.get("/api/files/{doc_id}")
-def get_document_file(doc_id: str):
-    if doc_id not in DOCUMENT_FILES or not os.path.exists(DOCUMENT_FILES[doc_id]):
-        raise HTTPException(status_code=404, detail="Document file not found")
-    
-    file_path = DOCUMENT_FILES[doc_id]
-    ext = os.path.splitext(file_path)[1].lower()
-    media_type = "image/svg+xml" if ext == ".svg" else ("image/png" if ext == ".png" else "application/octet-stream")
-    return FileResponse(file_path, media_type=media_type)
-
-
-@app.get("/api/records")
-def list_records():
-    return [rec.model_dump(mode="json") for rec in RECORDS_STORE.values()]
-
-
-@app.get("/api/records/{doc_id}")
-def get_record(doc_id: str):
-    if doc_id not in RECORDS_STORE:
-        raise HTTPException(status_code=404, detail="Record not found")
-    return RECORDS_STORE[doc_id].model_dump(mode="json")
-
-
-@app.post("/api/records/{doc_id}/repair-action")
-def apply_repair_action(doc_id: str, payload: Dict[str, Any] = Body(...)):
-    """Allows auditor/reviewer to confirm or reject suggested repairs."""
-    if doc_id not in RECORDS_STORE:
-        raise HTTPException(status_code=404, detail="Record not found")
-
-    rec = RECORDS_STORE[doc_id]
-    action = payload.get("action", "accept")  # "accept" or "reject"
-
-    if action == "accept":
-        rec.status = "verified"
-        rec.repair_log.append({
-            "loop": 99,
-            "field": "auditor_signoff",
-            "old_value": "repaired",
-            "applied": "verified_by_reviewer",
-            "reader": "Human Compliance Auditor",
-            "reason": "Auditor reviewed mathematical derivations and approved all proposed repairs for statutory filing.",
-        })
-    elif action == "reject":
-        if doc_id == "demo-inv-b-repaired":
-            # Revert to original written values on paper
-            rec.invoice.totals.cgst_amount = Decimal("720.00")
-            rec.invoice.totals.sgst_amount = Decimal("720.00")
-            rec.invoice.totals.grand_total = Decimal("8440.00")
-            if rec.invoice.line_items:
-                rec.invoice.line_items[0].cgst_amt = Decimal("720.00")
-                rec.invoice.line_items[0].sgst_amt = Decimal("720.00")
-                rec.invoice.line_items[0].line_total = Decimal("8440.00")
-        rec.status = "needs_review"
-        rec.repair_log.append({
-            "loop": 99,
-            "field": "auditor_rejection",
-            "old_value": "repaired",
-            "applied": "reverted_to_original_paper",
-            "reader": "Human Compliance Auditor",
-            "reason": "Auditor rejected automated repair. Flagged for supplier credit note request.",
-        })
-
-    return rec.model_dump(mode="json")
-
-
-@app.get("/api/financial-summary")
-def get_financial_summary():
-    """Computes executive financial impact metrics across all audited invoices."""
-    records = list(RECORDS_STORE.values())
-    total_taxable = 0.0
-    total_grand = 0.0
-    discrepancy_count = 0
-    discrepancy_value = 0.0
-    itc_safe = 0.0
-    itc_at_risk = 0.0
-
-    rule_failures = {
-        "Rule 1: GSTIN Checksum": 0,
-        "Rule 3: POS / IGST Mismatch": 0,
-        "Rule 4: CGST/SGST Symmetry": 0,
-        "Rule 5: Line Item Math Variance": 0,
-        "Rule 6: Grand Total Recalculation": 0,
-        "Rule 8: Section 16(2) ITC Block": 0,
-    }
-
-    vendors = {}
-
-    for r in records:
-        inv = r.invoice
-        tot = inv.totals if inv else None
-        taxable = float(tot.taxable_amount or 0.0) if tot else 0.0
-        grand = float(tot.grand_total or 0.0) if tot else 0.0
-        total_taxable += taxable
-        total_grand += grand
-
-        taxes = float(tot.cgst_amount or 0.0) + float(tot.sgst_amount or 0.0) + float(tot.igst_amount or 0.0) if tot else 0.0
-
-        if r.status == "verified":
-            itc_safe += taxes
-        else:
-            discrepancy_count += 1
-            itc_at_risk += taxes
-
-        # Check repair logs or rules for discrepancy value
-        if r.repair_log:
-            for l in r.repair_log:
-                if l.get("old_value") and l.get("applied") and l.get("old_value") != l.get("applied"):
-                    try:
-                        diff = abs(float(l["old_value"]) - float(l["applied"]))
-                        if "grand_total" in l.get("field", ""):
-                            discrepancy_value += diff
-                    except Exception:
-                        pass
-        elif r.status == "needs_review":
-            # Add known discrepancy
-            discrepancy_value += 27.00
-
-        # Rules tally
-        for rule in r.rules:
-            if not rule.passed:
-                if rule.rule_id == 1:
-                    rule_failures["Rule 1: GSTIN Checksum"] += 1
-                elif rule.rule_id == 3:
-                    rule_failures["Rule 3: POS / IGST Mismatch"] += 1
-                elif rule.rule_id == 4:
-                    rule_failures["Rule 4: CGST/SGST Symmetry"] += 1
-                elif rule.rule_id == 5:
-                    rule_failures["Rule 5: Line Item Math Variance"] += 1
-                elif rule.rule_id == 6:
-                    rule_failures["Rule 6: Grand Total Recalculation"] += 1
-                elif rule.rule_id == 8:
-                    rule_failures["Rule 8: Section 16(2) ITC Block"] += 1
-
-        # Vendor risk aggregation
-        sup_name = (inv.supplier.name if inv and inv.supplier else None) or "Unknown Vendor"
-        sup_gstin = (inv.supplier.gstin if inv and inv.supplier else None) or "—"
-        if sup_name not in vendors:
-            vendors[sup_name] = {
-                "name": sup_name,
-                "gstin": sup_gstin,
-                "invoices_count": 0,
-                "clean_count": 0,
-                "repaired_count": 0,
-                "review_count": 0,
-                "total_spend": 0.0,
-            }
-        v = vendors[sup_name]
-        v["invoices_count"] += 1
-        v["total_spend"] += grand
-        if r.status == "verified":
-            v["clean_count"] += 1
-        elif r.status == "repaired":
-            v["repaired_count"] += 1
-        else:
-            v["review_count"] += 1
-
-    # Vendor risk scores
-    vendor_list = []
-    for v in vendors.values():
-        if v["review_count"] > 0:
-            risk = "High Risk"
-            risk_color = "red"
-        elif v["repaired_count"] > 0:
-            risk = "Moderate Risk"
-            risk_color = "amber"
-        else:
-            risk = "Low Risk / Compliant"
-            risk_color = "green"
-        v["risk_level"] = risk
-        v["risk_color"] = risk_color
-        vendor_list.append(v)
-
-    return {
-        "total_invoices": len(records),
-        "total_taxable_value": total_taxable,
-        "total_grand_total": total_grand,
-        "discrepancy_count": discrepancy_count,
-        "discrepancy_value": discrepancy_value,
-        "itc_safe_value": itc_safe,
-        "itc_at_risk_value": itc_at_risk,
-        "rule_failures": rule_failures,
-        "vendor_rankings": vendor_list,
-    }
-
-
-@app.get("/api/anomalies")
-def get_cross_invoice_anomalies():
-    """Detects batch-level cross-invoice anomalies (duplicates, tax drift, POS conflicts)."""
-    anomalies = []
-    records = list(RECORDS_STORE.values())
-
-    # 1. Invoice Number Duplication check
-    inv_map = {}
-    for r in records:
-        num = (r.invoice.invoice_number if r.invoice else "") or ""
-        if num and num != "—":
-            inv_map.setdefault(num, []).append(r)
-    for num, recs in inv_map.items():
-        if len(recs) > 1:
-            anomalies.append({
-                "type": "duplicate_invoice_number",
-                "severity": "high",
-                "badge": "Confirmed Duplicate Alert",
-                "title": f"Duplicate Invoice Number #{num}",
-                "detail": f"Identified {len(recs)} invoice documents sharing the exact same invoice number #{num}. Risk of double-payment or duplicated input tax credit submission.",
-                "documents": [rec.filename or rec.document_id for rec in recs],
-                "action": "Hold payment and request vendor confirmation.",
-            })
-
-    # 2. Inter-State Place of Supply conflict check
-    for r in records:
-        if r.invoice and r.invoice.supplier and r.invoice.buyer:
-            s_st = r.invoice.supplier.state_code
-            pos = r.invoice.place_of_supply or ""
-            pos_code = pos[:2] if len(pos) >= 2 else ""
-            if s_st and pos_code and s_st != pos_code:
-                # Inter-state: must have IGST
-                tot = r.invoice.totals
-                if tot and (float(tot.cgst_amount or 0) > 0 or float(tot.sgst_amount or 0) > 0):
-                    anomalies.append({
-                        "type": "interstate_tax_head_conflict",
-                        "severity": "critical",
-                        "badge": "Statutory Law Violation",
-                        "title": f"Statutory Tax Head Conflict ({r.filename or r.document_id})",
-                        "detail": f"Supplier State is {s_st} while Place of Supply is {pos}. Under IGST Act Section 7, inter-state supply MANDATES IGST, but intra-state CGST+SGST was charged.",
-                        "documents": [r.filename or r.document_id],
-                        "action": "Block ITC claim under Section 16(2)(c). Request corrected GST invoice with IGST.",
-                    })
-
-    # 3. Arithmetic Drift Anomaly
-    for r in records:
-        if r.status in ("repaired", "needs_review"):
-            anomalies.append({
-                "type": "arithmetic_drift",
-                "severity": "medium",
-                "badge": "Tax Math Discrepancy",
-                "title": f"Arithmetic Discrepancy Detected ({r.filename or r.document_id})",
-                "detail": f"Calculated taxes deviate from stated values on document. Review constraint solver repairs before accounting ledger sync.",
-                "documents": [r.filename or r.document_id],
-                "action": "Inspect before-and-after audit timeline in side-by-side view.",
-            })
-
-    return anomalies
-
-
-@app.get("/api/export/{doc_id}")
-def export_record(doc_id: str, format: str = Query("json", pattern="^(json|csv)$")):
-    if doc_id not in RECORDS_STORE:
-        raise HTTPException(status_code=404, detail="Record not found")
-    record = RECORDS_STORE[doc_id]
-    if format == "json":
-        return JSONResponse(content=json.loads(export_to_json(record)))
-    else:
-        return PlainTextResponse(content=export_to_csv(record), media_type="text/csv")
-
-
-@app.get("/", response_class=HTMLResponse)
-def serve_ui(tab: Optional[str] = Query(None), demo: Optional[str] = Query(None), modal: Optional[str] = Query(None)):
-    """Serves the complete single-page interactive review UI."""
-    html = HTML_CONTENT
-    records_json = json.dumps([r.model_dump(mode="json") for r in RECORDS_STORE.values()])
-    fin_json = json.dumps(get_financial_summary())
-    anom_json = json.dumps(get_cross_invoice_anomalies())
-    
-    html = html.replace("/* __INITIAL_DATA_PLACEHOLDER__ */", f"""
-window.__INITIAL_RECORDS__ = {records_json};
-window.__INITIAL_FINANCIAL__ = {fin_json};
-window.__INITIAL_ANOMALIES__ = {anom_json};
-""")
-
-    if tab:
-        html = html.replace('<div id="landing">', '<div id="landing" style="display:none;">')
-        html = html.replace('<div id="app">', '<div id="app" style="display:block;">')
-        html = html.replace("currentTab: 'judge'", f"currentTab: '{tab}'")
-        if tab != 'judge':
-            html = html.replace('class="nav-tab-btn active" id="tabBtn_judge"', 'class="nav-tab-btn" id="tabBtn_judge"')
-            html = html.replace('class="tab-panel active" id="panel_judge"', 'class="tab-panel" id="panel_judge"')
-            html = html.replace(f'class="nav-tab-btn" id="tabBtn_{tab}"', f'class="nav-tab-btn active" id="tabBtn_{tab}"')
-            html = html.replace(f'class="tab-panel" id="panel_{tab}"', f'class="tab-panel active" id="panel_{tab}"')
-    if demo:
-        html = html.replace("selectedRecordId: 'demo-inv-a-verified'", f"selectedRecordId: '{demo}'")
-        if demo == 'demo-inv-b-repaired':
-            html = html.replace('class="scenario-card active" id="scCard_a"', 'class="scenario-card" id="scCard_a"')
-            html = html.replace('class="scenario-card" id="scCard_b"', 'class="scenario-card active" id="scCard_b"')
-        elif demo == 'demo-inv-c-review':
-            html = html.replace('class="scenario-card active" id="scCard_a"', 'class="scenario-card" id="scCard_a"')
-            html = html.replace('class="scenario-card" id="scCard_c"', 'class="scenario-card active" id="scCard_c"')
-    if modal == 'report':
-        html = html.replace('id="reportModalBackdrop"', 'id="reportModalBackdrop" style="display:flex;"')
-        html = html.replace('class="modal-backdrop"', 'class="modal-backdrop active"')
-    elif modal == 'shortcuts':
-        html = html.replace('id="shortcutsModalBackdrop"', 'id="shortcutsModalBackdrop" style="display:flex;"')
-        html = html.replace('class="modal-backdrop"', 'class="modal-backdrop active"')
-    return html
-
-
-HTML_CONTENT = """<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -1031,7 +614,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 <!-- ═══════════════════════════════════════════
      LANDING PAGE
 ══════════════════════════════════════════════ -->
-<div id="landing">
+<div id="landing" style="display:none;">
   <!-- Coin animation canvas overlaid on landing -->
   <canvas id="landingCoinCanvas"></canvas>
 
@@ -1198,7 +781,7 @@ HTML_CONTENT = """<!DOCTYPE html>
 <!-- ═══════════════════════════════════════════
      MAIN AUDIT WORKSPACE APPLICATION
 ══════════════════════════════════════════════ -->
-<div id="app">
+<div id="app" style="display:block;">
   <canvas id="glCanvas"></canvas>
 
   <!-- Sticky Top Application Header -->
@@ -1718,7 +1301,11 @@ HTML_CONTENT = """<!DOCTYPE html>
 <div id="toast" style="position:fixed;bottom:24px;right:24px;background:var(--charcoal);color:#F8F4EE;padding:12px 20px;border-radius:10px;font-size:0.85rem;font-weight:600;z-index:9999;opacity:0;transform:translateY(20px);transition:all 0.3s;pointer-events:none;"></div>
 
 <script>
-/* __INITIAL_DATA_PLACEHOLDER__ */
+
+window.__INITIAL_RECORDS__ = [{"document_id": "demo-inv-a-verified", "filename": "TAX_INVOICE_APEX_0381_VERIFIED.svg", "source_type": "digital_pdf", "status": "verified", "quality_score": 0.99, "invoice": {"invoice_number": "INV-2026-0381", "invoice_date": "12-Oct-2026", "place_of_supply": "27-Maharashtra", "is_reverse_charge": false, "supplier": {"name": "Apex Industrial Controls Ltd.", "gstin": "27AAACA1234F1Z5", "state_code": "27", "address": "Plot 42, MIDC Industrial Area, Pune, MH"}, "buyer": {"name": "Bharat Precision Engineering Works", "gstin": "27BBBCB5678K1ZF", "state_code": "27", "address": "Sector 9, Turbhe, Navi Mumbai, MH"}, "line_items": [{"item_index": 1, "description": "High-Torque AC Servo Motor 750W", "hsn_sac": "8501", "qty": "4", "rate": "12500.00", "discount": "0.00", "taxable_value": "50000.00", "cgst_rate": "0.09", "cgst_amt": "4500.00", "sgst_rate": "0.09", "sgst_amt": "4500.00", "igst_rate": "0.00", "igst_amt": "0.00", "line_total": "59000.00"}, {"item_index": 2, "description": "Shielded Industrial Cable 50m Drum", "hsn_sac": "8544", "qty": "10", "rate": "2200.00", "discount": "0.00", "taxable_value": "22000.00", "cgst_rate": "0.09", "cgst_amt": "1980.00", "sgst_rate": "0.09", "sgst_amt": "1980.00", "igst_rate": "0.00", "igst_amt": "0.00", "line_total": "25960.00"}], "totals": {"taxable_amount": "72000.00", "cgst_amount": "6480.00", "sgst_amount": "6480.00", "igst_amount": "0.00", "round_off": "0.00", "grand_total": "84960.00", "amount_in_words": null}}, "fields": {"invoice_number": {"path": "invoice_number", "value": "INV-2026-0381", "tier": "A", "confidence": 0.99, "provenance": "read", "bbox": {"page": 1, "x0": 0.06, "y0": 0.14, "x1": 0.38, "y1": 0.2}, "candidates": [], "evidence": [], "repair_history": []}, "invoice_date": {"path": "invoice_date", "value": "12-Oct-2026", "tier": "A", "confidence": 0.98, "provenance": "read", "bbox": {"page": 1, "x0": 0.44, "y0": 0.14, "x1": 0.68, "y1": 0.2}, "candidates": [], "evidence": [], "repair_history": []}, "place_of_supply": {"path": "place_of_supply", "value": "27-Maharashtra", "tier": "A", "confidence": 0.99, "provenance": "read", "bbox": {"page": 1, "x0": 0.69, "y0": 0.14, "x1": 0.96, "y1": 0.2}, "candidates": [], "evidence": [], "repair_history": []}, "supplier.gstin": {"path": "supplier.gstin", "value": "27AAACA1234F1Z5", "tier": "A", "confidence": 0.99, "provenance": "read", "bbox": {"page": 1, "x0": 0.05, "y0": 0.22, "x1": 0.48, "y1": 0.37}, "candidates": [], "evidence": [], "repair_history": []}, "buyer.gstin": {"path": "buyer.gstin", "value": "27BBBCB5678K1ZF", "tier": "A", "confidence": 0.99, "provenance": "read", "bbox": {"page": 1, "x0": 0.52, "y0": 0.22, "x1": 0.95, "y1": 0.37}, "candidates": [], "evidence": [], "repair_history": []}, "totals.taxable_amount": {"path": "totals.taxable_amount", "value": "72000.00", "tier": "A", "confidence": 0.99, "provenance": "read", "bbox": {"page": 1, "x0": 0.53, "y0": 0.6, "x1": 0.95, "y1": 0.65}, "candidates": [], "evidence": [], "repair_history": []}, "totals.cgst_amount": {"path": "totals.cgst_amount", "value": "6480.00", "tier": "A", "confidence": 0.99, "provenance": "read", "bbox": {"page": 1, "x0": 0.53, "y0": 0.66, "x1": 0.95, "y1": 0.71}, "candidates": [], "evidence": [], "repair_history": []}, "totals.sgst_amount": {"path": "totals.sgst_amount", "value": "6480.00", "tier": "A", "confidence": 0.99, "provenance": "read", "bbox": {"page": 1, "x0": 0.53, "y0": 0.72, "x1": 0.95, "y1": 0.77}, "candidates": [], "evidence": [], "repair_history": []}, "totals.grand_total": {"path": "totals.grand_total", "value": "84960.00", "tier": "A", "confidence": 0.99, "provenance": "read", "bbox": {"page": 1, "x0": 0.53, "y0": 0.78, "x1": 0.95, "y1": 0.86}, "candidates": [], "evidence": [], "repair_history": []}}, "rules": [{"rule_id": 1, "rule_name": "GSTIN Format & Checksum Verification", "passed": true, "severity": "hard", "implicated_fields": [], "message": "Supplier & Buyer GSTIN checksums pass ISO 7064 Mod 11,10 algorithm.", "expected_values": {"supplier": "27AAACA1234F1Z5", "buyer": "27BBBCB5678K1ZF"}}, {"rule_id": 3, "rule_name": "State Code & Tax Symmetry (CGST Act S.8)", "passed": true, "severity": "hard", "implicated_fields": [], "message": "Supplier State (27) matches POS (27). Intra-state supply correctly levied as CGST + SGST.", "expected_values": {"expected_tax": "CGST+SGST", "applied_tax": "CGST+SGST"}}, {"rule_id": 4, "rule_name": "CGST / SGST Rate & Value Symmetry", "passed": true, "severity": "hard", "implicated_fields": [], "message": "CGST (\u20b96,480.00) equals SGST (\u20b96,480.00) exactly.", "expected_values": {"cgst": "6480.00", "sgst": "6480.00"}}, {"rule_id": 5, "rule_name": "Line Item Tax Arithmetic (9% Rate Verification)", "passed": true, "severity": "hard", "implicated_fields": [], "message": "All line item taxes recomputed exactly at 9% rate with \u20b90.00 variance.", "expected_values": {"calculated": "6480.00", "extracted": "6480.00", "difference": "0.00"}}, {"rule_id": 6, "rule_name": "Grand Total Summation Invariant", "passed": true, "severity": "hard", "implicated_fields": [], "message": "Taxable (\u20b972,000.00) + CGST (\u20b96,480.00) + SGST (\u20b96,480.00) = \u20b984,960.00. Exact match.", "expected_values": {"expected_total": "84960.00", "actual_total": "84960.00"}}, {"rule_id": 8, "rule_name": "Section 16(2) ITC Claim Compliance Check", "passed": true, "severity": "hard", "implicated_fields": [], "message": "Invoice fully compliant under CGST Rule 46. Safe for 100% ITC claim.", "expected_values": {"itc_status": "ELIGIBLE"}}], "needs_review": [], "repair_log": [], "processing_stages": []}, {"document_id": "demo-inv-b-repaired", "filename": "HAND_BILLBOOK_0042_REPAIRED.svg", "source_type": "handwritten_image", "status": "repaired", "quality_score": 0.76, "invoice": {"invoice_number": "BB-8841", "invoice_date": "08-Oct-2026", "place_of_supply": "27-Maharashtra", "is_reverse_charge": false, "supplier": {"name": "Shree Ganesh Hardware & Tools", "gstin": "27ABCDE1234F1Z0", "state_code": "27", "address": "Ganj Peth, Pune - 411002"}, "buyer": {"name": "Apex Engineering Solutions", "gstin": "27XYZPQ5678K1ZF", "state_code": "27", "address": "MIDC Industrial Area, Pune"}, "line_items": [{"item_index": 1, "description": "Grade 8.8 Hex Structural Bolts", "hsn_sac": "7318", "qty": "20", "rate": "350.00", "discount": "0.00", "taxable_value": "7000.00", "cgst_rate": "0.09", "cgst_amt": "630.00", "sgst_rate": "0.09", "sgst_amt": "630.00", "igst_rate": "0.00", "igst_amt": "0.00", "line_total": "8260.00"}], "totals": {"taxable_amount": "7000.00", "cgst_amount": "630.00", "sgst_amount": "630.00", "igst_amount": "0.00", "round_off": "0.00", "grand_total": "8260.00", "amount_in_words": null}}, "fields": {"invoice_number": {"path": "invoice_number", "value": "BB-8841", "tier": "A", "confidence": 0.92, "provenance": "read", "bbox": {"page": 1, "x0": 0.06, "y0": 0.14, "x1": 0.35, "y1": 0.2}, "candidates": [], "evidence": [], "repair_history": []}, "supplier.gstin": {"path": "supplier.gstin", "value": "27ABCDE1234F1Z0", "tier": "A", "confidence": 0.91, "provenance": "read", "bbox": {"page": 1, "x0": 0.05, "y0": 0.22, "x1": 0.48, "y1": 0.36}, "candidates": [], "evidence": [], "repair_history": []}, "buyer.gstin": {"path": "buyer.gstin", "value": "27XYZPQ5678K1ZF", "tier": "A", "confidence": 0.94, "provenance": "read", "bbox": {"page": 1, "x0": 0.52, "y0": 0.22, "x1": 0.95, "y1": 0.36}, "candidates": [], "evidence": [], "repair_history": []}, "totals.taxable_amount": {"path": "totals.taxable_amount", "value": "7000.00", "tier": "A", "confidence": 0.95, "provenance": "read", "bbox": {"page": 1, "x0": 0.5, "y0": 0.54, "x1": 0.95, "y1": 0.61}, "candidates": [], "evidence": [], "repair_history": []}, "totals.cgst_amount": {"path": "totals.cgst_amount", "value": "630.00", "tier": "A", "confidence": 0.88, "provenance": "repaired", "bbox": {"page": 1, "x0": 0.72, "y0": 0.45, "x1": 0.85, "y1": 0.52}, "candidates": [], "evidence": [], "repair_history": ["Raw OCR: 720.00 -> Repaired: 630.00 (Constraint: taxable * 0.09)"]}, "totals.sgst_amount": {"path": "totals.sgst_amount", "value": "630.00", "tier": "A", "confidence": 0.88, "provenance": "repaired", "bbox": {"page": 1, "x0": 0.84, "y0": 0.45, "x1": 0.96, "y1": 0.52}, "candidates": [], "evidence": [], "repair_history": ["Raw OCR: 720.00 -> Repaired: 630.00 (Constraint: symmetry CGST==SGST)"]}, "totals.grand_total": {"path": "totals.grand_total", "value": "8260.00", "tier": "A", "confidence": 0.89, "provenance": "repaired", "bbox": {"page": 1, "x0": 0.5, "y0": 0.69, "x1": 0.95, "y1": 0.78}, "candidates": [], "evidence": [], "repair_history": ["Stated Total: 8440.00 -> Repaired: 8260.00 (Taxable 7000 + Taxes 1260)"]}}, "rules": [{"rule_id": 1, "rule_name": "GSTIN Format Checksum", "passed": true, "severity": "hard", "implicated_fields": [], "message": "Supplier & Buyer GSTIN formats verified.", "expected_values": {}}, {"rule_id": 3, "rule_name": "State Code Symmetry", "passed": true, "severity": "hard", "implicated_fields": [], "message": "Intra-state Maharashtra transaction. CGST + SGST confirmed.", "expected_values": {}}, {"rule_id": 5, "rule_name": "Tax Arithmetic Consistency Check", "passed": true, "severity": "soft", "implicated_fields": [], "message": "Original tax of \u20b91,440 differed from recalculation by \u20b9180. Successfully auto-repaired to \u20b91,260.", "expected_values": {"expected_tax": "1260.00", "raw_extracted_tax": "1440.00", "difference": "-180.00"}}, {"rule_id": 6, "rule_name": "Grand Total Recalculation", "passed": true, "severity": "soft", "implicated_fields": [], "message": "Grand total resolved to \u20b98,260.00. Reviewer confirmation requested before export.", "expected_values": {"expected_total": "8260.00", "original_written": "8440.00", "repaired_delta": "-180.00"}}], "needs_review": [], "repair_log": [{"loop": 1, "field": "totals.cgst_amount", "old_value": "720.00", "applied": "630.00", "reader": "ConstraintSolver: Taxable 7,000.00 \u00d7 9% = 630.00", "reason": "Writer wrote \u20b9720 instead of calculated \u20b9630 (caught \u20b990 discrepancy)"}, {"loop": 2, "field": "totals.sgst_amount", "old_value": "720.00", "applied": "630.00", "reader": "ConstraintSolver: Symmetry with CGST", "reason": "Writer wrote \u20b9720 instead of calculated \u20b9630 (caught \u20b990 discrepancy)"}, {"loop": 3, "field": "totals.grand_total", "old_value": "8440.00", "applied": "8260.00", "reader": "Backsolve: 7,000 + 630 + 630", "reason": "Corrected grand total from \u20b98,440.00 to exact \u20b98,260.00. Saved business \u20b9180 overpayment."}], "processing_stages": []}, {"document_id": "demo-inv-c-review", "filename": "ADVERSARIAL_SLIP_0991_REVIEW.svg", "source_type": "scanned_image", "status": "needs_review", "quality_score": 0.91, "invoice": {"invoice_number": "VSF-2026-991", "invoice_date": "02-Oct-2026", "place_of_supply": "29-Karnataka", "is_reverse_charge": false, "supplier": {"name": "Vighnaharta Steels & Fabrication", "gstin": "27AAAAA9999A0Z0", "state_code": "27", "address": "Industrial Estate, Nagpur, MH"}, "buyer": {"name": "Apex Engineering Solutions", "gstin": "29BBBBB1111B1Z9", "state_code": "29", "address": "Whitefield, Bengaluru, KA"}, "line_items": [{"item_index": 1, "description": "MS Structural Channels 100x50", "hsn_sac": "7216", "qty": "12", "rate": "950.00", "discount": "0.00", "taxable_value": "11400.00", "cgst_rate": "0.09", "cgst_amt": "1026.00", "sgst_rate": "0.09", "sgst_amt": "1026.00", "igst_rate": "0.00", "igst_amt": "0.00", "line_total": "13452.00"}], "totals": {"taxable_amount": "11400.00", "cgst_amount": "1026.00", "sgst_amount": "1026.00", "igst_amount": "0.00", "round_off": "0.00", "grand_total": "13425.00", "amount_in_words": null}}, "fields": {"invoice_number": {"path": "invoice_number", "value": "VSF-2026-991", "tier": "A", "confidence": 0.97, "provenance": "read", "bbox": {"page": 1, "x0": 0.06, "y0": 0.14, "x1": 0.35, "y1": 0.2}, "candidates": [], "evidence": [], "repair_history": []}, "place_of_supply": {"path": "place_of_supply", "value": "29-Karnataka", "tier": "A", "confidence": 0.98, "provenance": "read", "bbox": {"page": 1, "x0": 0.64, "y0": 0.14, "x1": 0.96, "y1": 0.2}, "candidates": [], "evidence": [], "repair_history": []}, "supplier.gstin": {"path": "supplier.gstin", "value": "27AAAAA9999A0Z0", "tier": "A", "confidence": 0.94, "provenance": "read", "bbox": {"page": 1, "x0": 0.05, "y0": 0.29, "x1": 0.48, "y1": 0.38}, "candidates": [], "evidence": [], "repair_history": []}, "buyer.gstin": {"path": "buyer.gstin", "value": "29BBBBB1111B1Z9", "tier": "A", "confidence": 0.96, "provenance": "read", "bbox": {"page": 1, "x0": 0.52, "y0": 0.22, "x1": 0.95, "y1": 0.36}, "candidates": [], "evidence": [], "repair_history": []}, "totals.taxable_amount": {"path": "totals.taxable_amount", "value": "11400.00", "tier": "A", "confidence": 0.97, "provenance": "read", "bbox": {"page": 1, "x0": 0.5, "y0": 0.54, "x1": 0.95, "y1": 0.6}, "candidates": [], "evidence": [], "repair_history": []}, "totals.cgst_amount": {"path": "totals.cgst_amount", "value": "1026.00", "tier": "A", "confidence": 0.94, "provenance": "read", "bbox": {"page": 1, "x0": 0.72, "y0": 0.45, "x1": 0.85, "y1": 0.52}, "candidates": [], "evidence": [], "repair_history": []}, "totals.sgst_amount": {"path": "totals.sgst_amount", "value": "1026.00", "tier": "A", "confidence": 0.94, "provenance": "read", "bbox": {"page": 1, "x0": 0.85, "y0": 0.45, "x1": 0.96, "y1": 0.52}, "candidates": [], "evidence": [], "repair_history": []}, "totals.grand_total": {"path": "totals.grand_total", "value": "13425.00", "tier": "A", "confidence": 0.96, "provenance": "read", "bbox": {"page": 1, "x0": 0.5, "y0": 0.69, "x1": 0.95, "y1": 0.78}, "candidates": [], "evidence": [], "repair_history": []}}, "rules": [{"rule_id": 1, "rule_name": "GSTIN Checksum (ISO 7064 Mod 11,10)", "passed": false, "severity": "hard", "implicated_fields": [], "message": "Supplier GSTIN 27AAAAA9999A0Z0 has an invalid checksum digit '0'. Expected '8'. Likely fake or corrupted GSTIN.", "expected_values": {"expected_checksum": "8", "extracted_checksum": "0"}}, {"rule_id": 3, "rule_name": "Place of Supply & Statutory Tax Head (IGST Act S.7)", "passed": false, "severity": "hard", "implicated_fields": [], "message": "Supplier State is 27 (Maharashtra) and Place of Supply is 29 (Karnataka). This is INTER-STATE supply requiring IGST 18%. Charging CGST+SGST violates tax statutes and blocks ITC claim under Section 16(2)(c).", "expected_values": {"statutory_head": "IGST (18%)", "charged_head": "CGST (9%) + SGST (9%)"}}, {"rule_id": 6, "rule_name": "Grand Total Arithmetic Recalculation", "passed": false, "severity": "hard", "implicated_fields": [], "message": "Stated invoice grand total (\u20b913,425.00) differs from line items calculation (\u20b913,452.00) by \u20b927.00.", "expected_values": {"calculated_sum": "13452.00", "stated_total": "13425.00", "difference": "-27.00"}}], "needs_review": ["Rule 1: Supplier GSTIN checksum invalid (checksum digit 0 != expected 8)", "Rule 3: Statutory State & Tax Head Mismatch. Inter-state supply to Karnataka (29) requires IGST, but CGST+SGST billed.", "Rule 6: Grand Total Arithmetic Mismatch (Stated \u20b913,425.00 vs Recalculated \u20b913,452.00, Diff: \u20b927.00)"], "repair_log": [], "processing_stages": []}];
+window.__INITIAL_FINANCIAL__ = {"total_invoices": 3, "total_taxable_value": 90400.0, "total_grand_total": 106645.0, "discrepancy_count": 2, "discrepancy_value": 207.0, "itc_safe_value": 12960.0, "itc_at_risk_value": 3312.0, "rule_failures": {"Rule 1: GSTIN Checksum": 1, "Rule 3: POS / IGST Mismatch": 1, "Rule 4: CGST/SGST Symmetry": 0, "Rule 5: Line Item Math Variance": 0, "Rule 6: Grand Total Recalculation": 1, "Rule 8: Section 16(2) ITC Block": 0}, "vendor_rankings": [{"name": "Apex Industrial Controls Ltd.", "gstin": "27AAACA1234F1Z5", "invoices_count": 1, "clean_count": 1, "repaired_count": 0, "review_count": 0, "total_spend": 84960.0, "risk_level": "Low Risk / Compliant", "risk_color": "green"}, {"name": "Shree Ganesh Hardware & Tools", "gstin": "27ABCDE1234F1Z0", "invoices_count": 1, "clean_count": 0, "repaired_count": 1, "review_count": 0, "total_spend": 8260.0, "risk_level": "Moderate Risk", "risk_color": "amber"}, {"name": "Vighnaharta Steels & Fabrication", "gstin": "27AAAAA9999A0Z0", "invoices_count": 1, "clean_count": 0, "repaired_count": 0, "review_count": 1, "total_spend": 13425.0, "risk_level": "High Risk", "risk_color": "red"}]};
+window.__INITIAL_ANOMALIES__ = [{"type": "interstate_tax_head_conflict", "severity": "critical", "badge": "Statutory Law Violation", "title": "Statutory Tax Head Conflict (ADVERSARIAL_SLIP_0991_REVIEW.svg)", "detail": "Supplier State is 27 while Place of Supply is 29-Karnataka. Under IGST Act Section 7, inter-state supply MANDATES IGST, but intra-state CGST+SGST was charged.", "documents": ["ADVERSARIAL_SLIP_0991_REVIEW.svg"], "action": "Block ITC claim under Section 16(2)(c). Request corrected GST invoice with IGST."}, {"type": "arithmetic_drift", "severity": "medium", "badge": "Tax Math Discrepancy", "title": "Arithmetic Discrepancy Detected (HAND_BILLBOOK_0042_REPAIRED.svg)", "detail": "Calculated taxes deviate from stated values on document. Review constraint solver repairs before accounting ledger sync.", "documents": ["HAND_BILLBOOK_0042_REPAIRED.svg"], "action": "Inspect before-and-after audit timeline in side-by-side view."}, {"type": "arithmetic_drift", "severity": "medium", "badge": "Tax Math Discrepancy", "title": "Arithmetic Discrepancy Detected (ADVERSARIAL_SLIP_0991_REVIEW.svg)", "detail": "Calculated taxes deviate from stated values on document. Review constraint solver repairs before accounting ledger sync.", "documents": ["ADVERSARIAL_SLIP_0991_REVIEW.svg"], "action": "Inspect before-and-after audit timeline in side-by-side view."}];
+
 /* ─────────────────────── APPLICATION STATE ─────────────────────── */
 var state = {
   currentTab: 'judge',
@@ -1943,7 +1530,7 @@ function renderSelectedRecord(){
   rDiv.innerHTML = (rec.rules || []).map(function(r){
     var stClass = r.passed ? 'alert-verified' : (r.severity === 'hard' ? 'alert-review' : 'alert-repaired');
     var icon = r.passed ? '&#10003;' : (r.severity === 'hard' ? '&#10007;' : '&#9888;');
-    return '<div class=\"alert-banner ' + stClass + '\" style=\"margin-bottom:8px;padding:8px 12px;font-size:0.8rem;cursor:pointer;\" data-rule=\"' + r.rule_id + '\" onclick=\"onRuleClick(' + r.rule_id + ')\"><div><strong>' + icon + ' Rule ' + r.rule_id + ': ' + r.rule_name + '</strong><div style=\"font-size:0.75rem;margin-top:2px;\">' + r.message + '</div></div><span style=\"font-size:0.7rem;text-transform:uppercase;opacity:0.8;\">' + (r.passed ? 'PASSED' : r.severity) + '</span></div>';
+    return '<div class="alert-banner ' + stClass + '" style="margin-bottom:8px;padding:8px 12px;font-size:0.8rem;cursor:pointer;" data-rule="' + r.rule_id + '" onclick="onRuleClick(' + r.rule_id + ')"><div><strong>' + icon + ' Rule ' + r.rule_id + ': ' + r.rule_name + '</strong><div style="font-size:0.75rem;margin-top:2px;">' + r.message + '</div></div><span style="font-size:0.7rem;text-transform:uppercase;opacity:0.8;">' + (r.passed ? 'PASSED' : r.severity) + '</span></div>';
   }).join('');
 }
 
@@ -2488,9 +2075,9 @@ function invAnimLoop() {
       ctx.textBaseline = 'middle';
       // shadow under glyph
       ctx.fillStyle = 'rgba(100,60,10,0.35)';
-      ctx.fillText('\u20B9', 0.8, 0.8);
+      ctx.fillText('₹', 0.8, 0.8);
       ctx.fillStyle = 'rgba(255,240,180,0.9)';
-      ctx.fillText('\u20B9', 0, 0);
+      ctx.fillText('₹', 0, 0);
     }
 
     // Sheen sweep
@@ -2535,7 +2122,3 @@ try {
 </script>
 </body>
 </html>
-"""
-
-if __name__ == "__main__":
-    uvicorn.run("gstlens.api.main:app", host="127.0.0.1", port=8000, reload=False)

@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" width="800" height="700">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="#faf8f5"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#1A2332" flood-opacity="0.08"/>
+    </filter>
+  </defs>
+  
+  <!-- Paper Base -->
+  <rect width="800" height="700" fill="url(#bgGrad)" rx="8"/>
+  <rect x="20" y="20" width="760" height="660" fill="none" stroke="#2D3A4A" stroke-width="2" rx="6"/>
+  
+  <!-- Header Banner -->
+  <rect x="20" y="20" width="760" height="65" fill="#1A2332" rx="4"/>
+  <text x="400" y="52" font-family="'Inter', Arial, sans-serif" font-size="20" font-weight="bold" fill="#F8F4EE" text-anchor="middle" letter-spacing="1">TAX INVOICE — APEX INDUSTRIAL CONTROLS</text>
+  <text x="400" y="72" font-family="'Inter', Arial, sans-serif" font-size="11" fill="#C8943A" text-anchor="middle">GST COMPLIANT B2B INVOICE · SECTION 31 CGST ACT 2017</text>
+
+  <!-- Document Meta Box -->
+  <rect x="35" y="98" width="730" height="42" fill="#F4EFE6" stroke="#D6C9B5" rx="4"/>
+  <text x="50" y="124" font-family="'Inter', Arial, sans-serif" font-size="12" font-weight="bold" fill="#68717D">INVOICE NO:</text>
+  <text x="145" y="124" font-family="'Inter', Arial, sans-serif" font-size="13" font-weight="bold" fill="#1A2332">INV-2026-0381</text>
+  
+  <text x="350" y="124" font-family="'Inter', Arial, sans-serif" font-size="12" font-weight="bold" fill="#68717D">DATE:</text>
+  <text x="400" y="124" font-family="'Inter', Arial, sans-serif" font-size="13" font-weight="bold" fill="#1A2332">12-Oct-2026</text>
+  
+  <text x="550" y="124" font-family="'Inter', Arial, sans-serif" font-size="12" font-weight="bold" fill="#68717D">PLACE OF SUPPLY:</text>
+  <text x="680" y="124" font-family="'Inter', Arial, sans-serif" font-size="13" font-weight="bold" fill="#15803D">27 - Maharashtra</text>
+
+  <!-- Parties Split Box -->
+  <!-- Supplier Box -->
+  <rect x="35" y="152" width="355" height="115" fill="#FFFFFF" stroke="#E5D9C8" rx="5" filter="url(#shadow)"/>
+  <rect x="35" y="152" width="355" height="24" fill="#EAE2D5" rx="3"/>
+  <text x="45" y="169" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#1A2332">SUPPLIER (CONSIGNOR):</text>
+  <text x="45" y="193" font-family="'Inter', Arial, sans-serif" font-size="13" font-weight="bold" fill="#1A2332">Apex Industrial Controls Ltd.</text>
+  <text x="45" y="211" font-family="'Inter', Arial, sans-serif" font-size="11" fill="#68717D">Plot 42, MIDC Industrial Area, Pune, MH</text>
+  <text x="45" y="232" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#68717D">GSTIN: <tspan fill="#1E3A8A" font-size="13">27AAACA1234F1Z5</tspan></text>
+  <text x="45" y="250" font-family="'Inter', Arial, sans-serif" font-size="10" fill="#15803D">✓ Registered Regular Taxpayer</text>
+
+  <!-- Buyer Box -->
+  <rect x="410" y="152" width="355" height="115" fill="#FFFFFF" stroke="#E5D9C8" rx="5" filter="url(#shadow)"/>
+  <rect x="410" y="152" width="355" height="24" fill="#EAE2D5" rx="3"/>
+  <text x="420" y="169" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#1A2332">BUYER / BILLED TO (CONSIGNEE):</text>
+  <text x="420" y="193" font-family="'Inter', Arial, sans-serif" font-size="13" font-weight="bold" fill="#1A2332">Bharat Precision Engineering Works</text>
+  <text x="420" y="211" font-family="'Inter', Arial, sans-serif" font-size="11" fill="#68717D">Sector 9, Turbhe, Navi Mumbai, MH</text>
+  <text x="420" y="232" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#68717D">GSTIN: <tspan fill="#1E3A8A" font-size="13">27BBBCB5678K1ZF</tspan></text>
+  <text x="420" y="250" font-family="'Inter', Arial, sans-serif" font-size="10" fill="#15803D">✓ Valid ITC Recipient</text>
+
+  <!-- Line Item Table -->
+  <rect x="35" y="280" width="730" height="30" fill="#1A2332" rx="4"/>
+  <text x="45" y="300" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">#</text>
+  <text x="75" y="300" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">Item Description</text>
+  <text x="310" y="300" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">HSN</text>
+  <text x="370" y="300" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">Qty</text>
+  <text x="420" y="300" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">Rate (₹)</text>
+  <text x="500" y="300" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">Taxable (₹)</text>
+  <text x="590" y="300" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">CGST 9%</text>
+  <text x="675" y="300" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">SGST 9%</text>
+
+  <!-- Row 1 -->
+  <rect x="35" y="315" width="730" height="42" fill="#FFFFFF" stroke="#E5D9C8"/>
+  <text x="45" y="341" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">1</text>
+  <text x="75" y="341" font-family="'Inter', Arial, sans-serif" font-size="12" font-weight="600" fill="#1A2332">High-Torque AC Servo Motor 750W</text>
+  <text x="310" y="341" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#68717D">8501</text>
+  <text x="375" y="341" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">4</text>
+  <text x="420" y="341" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">12,500.00</text>
+  <text x="500" y="341" font-family="'Inter', Arial, sans-serif" font-size="12" font-weight="bold" fill="#1A2332">50,000.00</text>
+  <text x="590" y="341" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">4,500.00</text>
+  <text x="675" y="341" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">4,500.00</text>
+
+  <!-- Row 2 -->
+  <rect x="35" y="360" width="730" height="42" fill="#FAF8F5" stroke="#E5D9C8"/>
+  <text x="45" y="386" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">2</text>
+  <text x="75" y="386" font-family="'Inter', Arial, sans-serif" font-size="12" font-weight="600" fill="#1A2332">Shielded Industrial Cable 50m Drum</text>
+  <text x="310" y="386" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#68717D">8544</text>
+  <text x="375" y="386" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">10</text>
+  <text x="420" y="386" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">2,200.00</text>
+  <text x="500" y="386" font-family="'Inter', Arial, sans-serif" font-size="12" font-weight="bold" fill="#1A2332">22,000.00</text>
+  <text x="590" y="386" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">1,980.00</text>
+  <text x="675" y="386" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#1A2332">1,980.00</text>
+
+  <!-- Calculation & Totals Box -->
+  <rect x="420" y="420" width="345" height="150" fill="#FFFFFF" stroke="#D6C9B5" rx="5" filter="url(#shadow)"/>
+  
+  <text x="440" y="445" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#68717D">Total Taxable Value:</text>
+  <text x="740" y="445" font-family="'Inter', Arial, sans-serif" font-size="13" font-weight="600" fill="#1A2332" text-anchor="end">₹72,000.00</text>
+  
+  <text x="440" y="472" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#68717D">Central GST (CGST 9%):</text>
+  <text x="740" y="472" font-family="'Inter', Arial, sans-serif" font-size="13" font-weight="600" fill="#1A2332" text-anchor="end">₹6,480.00</text>
+  
+  <text x="440" y="498" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#68717D">State GST (SGST 9%):</text>
+  <text x="740" y="498" font-family="'Inter', Arial, sans-serif" font-size="13" font-weight="600" fill="#1A2332" text-anchor="end">₹6,480.00</text>
+  
+  <line x1="435" y1="512" x2="750" y2="512" stroke="#D6C9B5" stroke-width="1.5"/>
+  <rect x="430" y="520" width="325" height="40" fill="#F4EFE6" rx="4"/>
+  <text x="445" y="546" font-family="'Inter', Arial, sans-serif" font-size="14" font-weight="bold" fill="#1A2332">GRAND TOTAL (INR):</text>
+  <text x="740" y="546" font-family="'Inter', Arial, sans-serif" font-size="16" font-weight="bold" fill="#15803D" text-anchor="end">₹84,960.00</text>
+
+  <!-- Left Side: Compliance Stamp & Declaration -->
+  <rect x="35" y="430" width="360" height="135" fill="#FAF8F5" stroke="#E5D9C8" rx="4"/>
+  <text x="50" y="455" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#1A2332">ELECTRONIC AUDIT VERIFICATION</text>
+  <text x="50" y="475" font-family="'Inter', Arial, sans-serif" font-size="10" fill="#68717D">Certified mathematically sound and GST statutory compliant.</text>
+  <text x="50" y="495" font-family="'Inter', Arial, sans-serif" font-size="10" fill="#68717D">Section 16(2) CGST Rules Satisfied · Full ITC Eligible.</text>
+  
+  <rect x="50" y="510" width="160" height="42" fill="#DCFCE7" stroke="#86EFAC" rx="4"/>
+  <text x="130" y="535" font-family="'Inter', Arial, sans-serif" font-size="12" font-weight="bold" fill="#15803D" text-anchor="middle">✓ VERIFIED BY GSTLENS</text>
+
+  <!-- Signoff Footer -->
+  <text x="400" y="620" font-family="'Inter', Arial, sans-serif" font-size="10" fill="#9AA4AE" text-anchor="middle">This is a computer-generated tax invoice verified under GST Rule 46. No physical signature required.</text>
+</svg>

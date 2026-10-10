@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" width="800" height="700">
+  <defs>
+    <filter id="inkShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#854d0e" flood-opacity="0.15"/>
+    </filter>
+  </defs>
+  
+  <!-- Parchment Bill-Book Paper -->
+  <rect width="800" height="700" fill="#FFFDF8" rx="6"/>
+  <rect x="18" y="18" width="764" height="664" fill="none" stroke="#D97706" stroke-width="2.5" stroke-dasharray="6,3" rx="6"/>
+  
+  <!-- Header Title -->
+  <rect x="25" y="25" width="750" height="65" fill="#FEF3C7" rx="4"/>
+  <text x="400" y="58" font-family="'Comic Sans MS', 'Brush Script MT', cursive, sans-serif" font-size="24" font-weight="bold" fill="#92400E" text-anchor="middle">CASH / CREDIT BILL BOOK — SHREE GANESH TRADERS</text>
+  <text x="400" y="78" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#B45309" text-anchor="middle">RETAIL &amp; WHOLESALE INDUSTRIAL SUPPLIES · PUNE ROAD</text>
+
+  <!-- Bill Metadata -->
+  <rect x="35" y="100" width="730" height="42" fill="#FFFBEB" stroke="#FDE68A" rx="4"/>
+  <text x="50" y="126" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#92400E">BILL NO:</text>
+  <text x="120" y="126" font-family="'Comic Sans MS', cursive" font-size="15" font-weight="bold" fill="#1E293B">BB-8841</text>
+  
+  <text x="360" y="126" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#92400E">DATE:</text>
+  <text x="415" y="126" font-family="'Comic Sans MS', cursive" font-size="14" font-weight="bold" fill="#1E293B">08/10/2026</text>
+  
+  <text x="570" y="126" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#92400E">POS:</text>
+  <text x="615" y="126" font-family="'Comic Sans MS', cursive" font-size="13" font-weight="bold" fill="#1E293B">27-MAHARASHTRA</text>
+
+  <!-- Parties -->
+  <rect x="35" y="152" width="355" height="110" fill="#FFFFFF" stroke="#FCD34D" rx="4"/>
+  <text x="45" y="172" font-family="'Inter', Arial, sans-serif" font-size="10" font-weight="bold" fill="#B45309">SUPPLIER:</text>
+  <text x="45" y="194" font-family="'Comic Sans MS', cursive" font-size="15" font-weight="bold" fill="#0F172A">Shree Ganesh Hardware &amp; Tools</text>
+  <text x="45" y="214" font-family="'Comic Sans MS', cursive" font-size="12" fill="#475569">Ganj Peth, Pune - 411002</text>
+  <text x="45" y="238" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#92400E">GSTIN: <tspan font-family="'Comic Sans MS', cursive" font-size="14" font-weight="bold" fill="#1E3A8A">27ABCDE1234F1Z0</tspan></text>
+
+  <rect x="410" y="152" width="355" height="110" fill="#FFFFFF" stroke="#FCD34D" rx="4"/>
+  <text x="420" y="172" font-family="'Inter', Arial, sans-serif" font-size="10" font-weight="bold" fill="#B45309">BUYER (M/S):</text>
+  <text x="420" y="194" font-family="'Comic Sans MS', cursive" font-size="15" font-weight="bold" fill="#0F172A">Apex Engineering Solutions</text>
+  <text x="420" y="214" font-family="'Comic Sans MS', cursive" font-size="12" fill="#475569">MIDC Industrial Area, Pune</text>
+  <text x="420" y="238" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#92400E">GSTIN: <tspan font-family="'Comic Sans MS', cursive" font-size="14" font-weight="bold" fill="#1E3A8A">27XYZPQ5678K1ZF</tspan></text>
+
+  <!-- Items Table Header -->
+  <rect x="35" y="275" width="730" height="28" fill="#B45309" rx="3"/>
+  <text x="50" y="294" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">#</text>
+  <text x="85" y="294" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">Particulars / Goods</text>
+  <text x="320" y="294" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">HSN</text>
+  <text x="375" y="294" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">Qty</text>
+  <text x="430" y="294" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">Rate</text>
+  <text x="505" y="294" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">Taxable Value</text>
+  <text x="600" y="294" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">CGST 9%</text>
+  <text x="685" y="294" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#FFFFFF">SGST 9%</text>
+
+  <!-- Line Item Row 1 with handwritten ink styling -->
+  <rect x="35" y="310" width="730" height="48" fill="#FFFFFF" stroke="#FDE68A"/>
+  <text x="50" y="339" font-family="'Comic Sans MS', cursive" font-size="14" fill="#0F172A">1</text>
+  <text x="85" y="339" font-family="'Comic Sans MS', cursive" font-size="14" font-weight="bold" fill="#0F172A">Grade 8.8 Hex Structural Bolts</text>
+  <text x="320" y="339" font-family="'Comic Sans MS', cursive" font-size="13" fill="#475569">7318</text>
+  <text x="380" y="339" font-family="'Comic Sans MS', cursive" font-size="14" fill="#0F172A">20</text>
+  <text x="430" y="339" font-family="'Comic Sans MS', cursive" font-size="14" fill="#0F172A">350.00</text>
+  <text x="505" y="339" font-family="'Comic Sans MS', cursive" font-size="15" font-weight="bold" fill="#0F172A">7,000.00</text>
+  
+  <!-- Discrepancy Alert Highlight on Paper -->
+  <rect x="585" y="317" width="85" height="34" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="3,2" rx="3"/>
+  <text x="627" y="339" font-family="'Comic Sans MS', cursive" font-size="14" font-weight="bold" fill="#B91C1C" text-anchor="middle">720.00</text>
+
+  <rect x="675" y="317" width="85" height="34" fill="#FEE2E2" stroke="#DC2626" stroke-width="1.5" stroke-dasharray="3,2" rx="3"/>
+  <text x="717" y="339" font-family="'Comic Sans MS', cursive" font-size="14" font-weight="bold" fill="#B91C1C" text-anchor="middle">720.00</text>
+
+  <!-- Totals Box with Arithmetic Slip -->
+  <rect x="390" y="380" width="375" height="180" fill="#FFFFFF" stroke="#D97706" rx="5" filter="url(#inkShadow)"/>
+  
+  <text x="410" y="410" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#64748B">Subtotal Taxable:</text>
+  <text x="740" y="410" font-family="'Comic Sans MS', cursive" font-size="15" font-weight="bold" fill="#0F172A" text-anchor="end">7,000.00</text>
+  
+  <text x="410" y="440" font-family="'Inter', Arial, sans-serif" font-size="12" fill="#B91C1C">Written Tax (9%+9% = 18%):</text>
+  <text x="740" y="440" font-family="'Comic Sans MS', cursive" font-size="15" font-weight="bold" fill="#B91C1C" text-anchor="end">1,440.00*</text>
+  
+  <text x="410" y="465" font-family="'Inter', Arial, sans-serif" font-size="10" fill="#B45309">⚡ Calculation Slip: 18% of 7,000 is 1,260, not 1,440</text>
+  
+  <line x1="405" y1="480" x2="750" y2="480" stroke="#FDE68A" stroke-width="2"/>
+  
+  <rect x="405" y="492" width="345" height="50" fill="#FEF3C7" rx="4"/>
+  <text x="420" y="522" font-family="'Inter', Arial, sans-serif" font-size="13" font-weight="bold" fill="#92400E">WRITTEN GRAND TOTAL:</text>
+  <text x="735" y="523" font-family="'Comic Sans MS', cursive" font-size="18" font-weight="bold" fill="#B91C1C" text-anchor="end">₹8,440.00</text>
+
+  <!-- Repair Annotation Bubble -->
+  <rect x="35" y="385" width="330" height="150" fill="#FFFBEB" stroke="#F59E0B" stroke-width="1.5" rx="5"/>
+  <text x="50" y="412" font-family="'Inter', Arial, sans-serif" font-size="12" font-weight="bold" fill="#92400E">🔧 GSTLens Auto-Repair Detection</text>
+  <text x="50" y="435" font-family="'Inter', Arial, sans-serif" font-size="11" fill="#78350F">• Detected +₹180 arithmetic overcharge on paper.</text>
+  <text x="50" y="455" font-family="'Inter', Arial, sans-serif" font-size="11" fill="#78350F">• Proposed CGST: ₹630.00 · SGST: ₹630.00</text>
+  <text x="50" y="475" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#15803D">• Corrected Grand Total: ₹8,260.00</text>
+  
+  <rect x="50" y="492" width="220" height="28" fill="#FEF3C7" stroke="#FCD34D" rx="4"/>
+  <text x="160" y="511" font-family="'Inter', Arial, sans-serif" font-size="11" font-weight="bold" fill="#92400E" text-anchor="middle">~ REPAIRED &amp; AUDITABLE</text>
+
+  <!-- Stamp -->
+  <rect x="55" y="570" width="180" height="55" fill="none" stroke="#DC2626" stroke-width="2" stroke-dasharray="4,2" rx="4"/>
+  <text x="145" y="602" font-family="'Courier New', monospace" font-size="13" font-weight="bold" fill="#DC2626" text-anchor="middle">SHREE GANESH TRADERS</text>
+  <text x="145" y="618" font-family="'Courier New', monospace" font-size="10" fill="#DC2626" text-anchor="middle">AUTHENTIC BILL-BOOK</text>
+</svg>

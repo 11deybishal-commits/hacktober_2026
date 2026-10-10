@@ -20,6 +20,26 @@ def load_image(image_path_or_bytes: Any) -> np.ndarray:
     if isinstance(image_path_or_bytes, str):
         if not os.path.exists(image_path_or_bytes):
             raise FileNotFoundError(f"Image file not found: {image_path_or_bytes}")
+        if image_path_or_bytes.lower().endswith(".svg"):
+            try:
+                import xml.etree.ElementTree as ET
+                with open(image_path_or_bytes, "r", encoding="utf-8", errors="ignore") as f:
+                    svg_content = f.read()
+                root = ET.fromstring(svg_content)
+                canvas = np.ones((600, 750, 3), dtype=np.uint8) * 255
+                for el in root.iter():
+                    if el.tag.endswith("text"):
+                        txt = "".join(el.itertext()).strip()
+                        if txt:
+                            try:
+                                x = max(10, min(700, int(float(el.attrib.get("x", 40)))))
+                                y = max(20, min(580, int(float(el.attrib.get("y", 100)))))
+                                cv2.putText(canvas, txt, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (20, 20, 20), 1, cv2.LINE_AA)
+                            except Exception:
+                                pass
+                return canvas
+            except Exception:
+                pass
         try:
             pil_img = Image.open(image_path_or_bytes)
             # Correct EXIF orientation
@@ -33,6 +53,25 @@ def load_image(image_path_or_bytes: Any) -> np.ndarray:
             raise ValueError(f"Failed to load image from {image_path_or_bytes}")
 
     elif isinstance(image_path_or_bytes, bytes):
+        if b"<svg" in image_path_or_bytes:
+            try:
+                import xml.etree.ElementTree as ET
+                svg_content = image_path_or_bytes.decode("utf-8", errors="ignore")
+                root = ET.fromstring(svg_content)
+                canvas = np.ones((600, 750, 3), dtype=np.uint8) * 255
+                for el in root.iter():
+                    if el.tag.endswith("text"):
+                        txt = "".join(el.itertext()).strip()
+                        if txt:
+                            try:
+                                x = max(10, min(700, int(float(el.attrib.get("x", 40)))))
+                                y = max(20, min(580, int(float(el.attrib.get("y", 100)))))
+                                cv2.putText(canvas, txt, (x, y), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (20, 20, 20), 1, cv2.LINE_AA)
+                            except Exception:
+                                pass
+                return canvas
+            except Exception:
+                pass
         try:
             pil_img = Image.open(io.BytesIO(image_path_or_bytes))
             pil_img = ImageOps.exif_transpose(pil_img)
